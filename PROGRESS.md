@@ -1,6 +1,6 @@
 # Quick LMS - Implementation Progress
 
-**Last Updated:** 2025-11-19 (Phase 6.1: Certificates Complete)
+**Last Updated:** 2025-11-19 (Phase 6.2: Discussions & Forums Complete)
 
 This document tracks the implementation progress of the Quick LMS platform. Tasks are organized by phase and priority.
 
@@ -14,7 +14,7 @@ This document tracks the implementation progress of the Quick LMS platform. Task
 - ✅ **Phase 3: Course Management** - COMPLETED
 - ✅ **Phase 4: Student Features** - COMPLETED
 - ✅ **Phase 5: Assessments & Grading** - COMPLETED
-- 🔄 **Phase 6: Advanced Features** - IN PROGRESS (~15% - Certificates Complete)
+- 🔄 **Phase 6: Advanced Features** - IN PROGRESS (~30% - Certificates + Discussions Complete)
 
 ---
 
@@ -661,7 +661,7 @@ Progress Algorithm:
 
 ## Phase 6: Advanced Features 🔄 IN PROGRESS
 
-**Priority:** LOW | **Status:** ~15% Complete (Certificates Complete)
+**Priority:** LOW | **Status:** ~30% Complete (Certificates + Discussions Complete)
 
 ### Certificates ✅ COMPLETED
 
@@ -717,14 +717,62 @@ Pages:
 - Future enhancement: Custom certificate templates per institution
 - Future enhancement: Certificate expiration and renewal system
 
-### Discussions & Forums
+### Discussions & Forums ✅ COMPLETED
 
-- ⏳ Course discussion board
-- ⏳ Create discussion thread
-- ⏳ Reply to discussions
-- ⏳ Nested replies
-- ⏳ Pin/close discussions
-- ⏳ Discussion notifications
+- ✅ Course discussion board
+- ✅ Create discussion thread
+- ✅ Reply to discussions (with nested replies up to 5 levels deep)
+- ✅ Nested reply threading system
+- ✅ Pin/close/resolve discussions (instructor only)
+- ✅ View count tracking
+- ✅ Reply count tracking
+- ✅ Edit and delete discussions and replies
+- ✅ Permission-based moderation
+- ⏳ Discussion notifications (Future enhancement)
+
+**Files Created (Discussions):**
+
+Backend:
+- `server/routers/discussion.ts` - Complete discussion router (600+ lines)
+  - createDiscussion - Create new discussion threads
+  - getCourseDiscussions - Get all course discussions with filtering
+  - getDiscussionById - Get discussion with nested replies
+  - createReply - Create reply to discussion or another reply
+  - updateDiscussion / updateReply - Edit discussions and replies
+  - deleteDiscussion / deleteReply - Delete with permission checks
+  - togglePin / toggleClose / toggleResolve - Instructor moderation
+- `server/db/schema/lms.ts` - Added discussion and reply tables with relations
+
+Frontend Components:
+- `components/course/discussion-board.tsx` - Discussion listing (250+ lines)
+- `components/course/discussion-thread.tsx` - Thread view with nested replies (450+ lines)
+- `components/course/create-discussion-form.tsx` - New discussion form (120+ lines)
+
+Pages:
+- `app/courses/[id]/discussions/page.tsx` - Course discussions page
+- `app/courses/[id]/discussions/[discussionId]/page.tsx` - Discussion thread page
+- `app/courses/[id]/discussions/new/page.tsx` - New discussion page
+
+**Key Features Implemented:**
+
+1. **Discussion Threads**: Create, view, edit, and delete discussion threads
+2. **Nested Replies**: Support for nested replies up to 5 levels deep with tree structure
+3. **Moderation**: Pin, close, and resolve discussions (instructor/admin only)
+4. **View Tracking**: Automatic view count increment when viewing discussions
+5. **Reply Tracking**: Real-time reply count and last reply tracking
+6. **Permission System**: Role-based access control for all operations
+7. **Filtering**: Show/hide resolved discussions
+8. **Soft Delete**: Replies are soft-deleted to preserve thread structure
+
+**Implementation Notes:**
+
+- Nested reply tree structure built client-side for optimal rendering
+- Max nesting depth of 5 levels to prevent excessive indentation
+- Soft delete for replies preserves conversation flow
+- View count increments automatically on discussion view
+- Future enhancement: Real-time updates with WebSockets
+- Future enhancement: Email notifications for replies
+- Future enhancement: Markdown support for rich formatting
 
 ### Announcements
 
@@ -966,6 +1014,6 @@ await fetch(uploadUrl, {
 
 ---
 
-**Last Commit:** Phase 6.1: Certificates - Complete certificate system with auto-issue and verification
-**Current Status:** Phase 6 In Progress - Certificates complete (~15%)
-**Next Milestone:** Phase 6.2: Discussions & Forums - Course discussion boards and threads
+**Last Commit:** Phase 6.2: Discussions & Forums - Complete discussion system with nested replies and moderation
+**Current Status:** Phase 6 In Progress - Certificates + Discussions complete (~30%)
+**Next Milestone:** Phase 6.3: Announcements - Course announcements and notifications

@@ -561,6 +561,100 @@ export const wishlists = sqliteTable(
   ]
 );
 
+// =============================================================================
+// DISCUSSIONS & FORUMS
+// =============================================================================
+
+/**
+ * Discussions - course discussion threads
+ */
+export const discussions = sqliteTable(
+  "discussions",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
+
+    // Relations
+    courseId: text("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    lessonId: text("lesson_id").references(() => lessons.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    institutionId: text("institution_id")
+      .notNull()
+      .references(() => institutions.id, { onDelete: "cascade" }),
+
+    // Status and moderation
+    isPinned: integer("is_pinned", { mode: "boolean" }).default(false).notNull(),
+    isClosed: integer("is_closed", { mode: "boolean" }).default(false).notNull(),
+    isResolved: integer("is_resolved", { mode: "boolean" }).default(false).notNull(),
+
+    // Stats
+    replyCount: integer("reply_count").default(0).notNull(),
+    viewCount: integer("view_count").default(0).notNull(),
+    lastReplyAt: integer("last_reply_at", { mode: "timestamp" }),
+    lastReplyBy: text("last_reply_by").references(() => users.id),
+
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("discussions_course_idx").on(table.courseId),
+    index("discussions_lesson_idx").on(table.lessonId),
+    index("discussions_user_idx").on(table.userId),
+    index("discussions_pinned_idx").on(table.isPinned, table.courseId),
+  ]
+);
+
+/**
+ * Discussion replies - nested replies to discussions
+ */
+export const discussionReplies = sqliteTable(
+  "discussion_replies",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    content: text("content").notNull(),
+
+    // Relations
+    discussionId: text("discussion_id")
+      .notNull()
+      .references(() => discussions.id, { onDelete: "cascade" }),
+    parentReplyId: text("parent_reply_id").references(() => discussionReplies.id, {
+      onDelete: "cascade",
+    }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    // Moderation
+    isDeleted: integer("is_deleted", { mode: "boolean" }).default(false).notNull(),
+    deletedAt: integer("deleted_at", { mode: "timestamp" }),
+
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("discussion_replies_discussion_idx").on(table.discussionId),
+    index("discussion_replies_parent_idx").on(table.parentReplyId),
+    index("discussion_replies_user_idx").on(table.userId),
+  ]
+);
+
 // Zod schemas
 export const insertEnrollmentSchema = createInsertSchema(enrollments);
 export const selectEnrollmentSchema = createSelectSchema(enrollments);
@@ -597,6 +691,17 @@ export const insertCourseReviewSchema = createInsertSchema(courseReviews, {
 });
 export const selectCourseReviewSchema = createSelectSchema(courseReviews);
 
+export const insertDiscussionSchema = createInsertSchema(discussions, {
+  title: z.string().min(1).max(200),
+  content: z.string().min(1),
+});
+export const selectDiscussionSchema = createSelectSchema(discussions);
+
+export const insertDiscussionReplySchema = createInsertSchema(discussionReplies, {
+  content: z.string().min(1),
+});
+export const selectDiscussionReplySchema = createSelectSchema(discussionReplies);
+
 // Types
 export type Enrollment = typeof enrollments.$inferSelect;
 export type NewEnrollment = typeof enrollments.$inferInsert;
@@ -620,6 +725,10 @@ export type CourseReview = typeof courseReviews.$inferSelect;
 export type NewCourseReview = typeof courseReviews.$inferInsert;
 export type Wishlist = typeof wishlists.$inferSelect;
 export type NewWishlist = typeof wishlists.$inferInsert;
+export type Discussion = typeof discussions.$inferSelect;
+export type NewDiscussion = typeof discussions.$inferInsert;
+export type DiscussionReply = typeof discussionReplies.$inferSelect;
+export type NewDiscussionReply = typeof discussionReplies.$inferInsert;
 
 // Relations
 export const enrollmentsRelations = relations(enrollments, ({ one }) => ({
@@ -792,5 +901,48 @@ export const certificatesRelations = relations(certificates, ({ one }) => ({
   institution: one(institutions, {
     fields: [certificates.institutionId],
     references: [institutions.id],
+  }),
+}));
+
+export const discussionsRelations = relations(discussions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [discussions.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [discussions.courseId],
+    references: [courses.id],
+  }),
+  lesson: one(lessons, {
+    fields: [discussions.lessonId],
+    references: [lessons.id],
+  }),
+  institution: one(institutions, {
+    fields: [discussions.institutionId],
+    references: [institutions.id],
+  }),
+  lastReplyByUser: one(users, {
+    fields: [discussions.lastReplyBy],
+    references: [users.id],
+  }),
+  replies: many(discussionReplies),
+}));
+
+export const discussionRepliesRelations = relations(discussionReplies, ({ one, many }) => ({
+  discussion: one(discussions, {
+    fields: [discussionReplies.discussionId],
+    references: [discussions.id],
+  }),
+  parentReply: one(discussionReplies, {
+    fields: [discussionReplies.parentReplyId],
+    references: [discussionReplies.id],
+    relationName: "childReplies",
+  }),
+  user: one(users, {
+    fields: [discussionReplies.userId],
+    references: [users.id],
+  }),
+  childReplies: many(discussionReplies, {
+    relationName: "childReplies",
   }),
 }));
