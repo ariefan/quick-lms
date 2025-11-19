@@ -1,6 +1,6 @@
 # Quick LMS - Implementation Progress
 
-**Last Updated:** 2025-11-19 (Phase 6.3: Announcements Complete)
+**Last Updated:** 2025-11-19 (Phase 6.5: Coupons & Discounts Complete)
 
 This document tracks the implementation progress of the Quick LMS platform. Tasks are organized by phase and priority.
 
@@ -14,7 +14,7 @@ This document tracks the implementation progress of the Quick LMS platform. Task
 - ✅ **Phase 3: Course Management** - COMPLETED
 - ✅ **Phase 4: Student Features** - COMPLETED
 - ✅ **Phase 5: Assessments & Grading** - COMPLETED
-- 🔄 **Phase 6: Advanced Features** - IN PROGRESS (~50% - Certificates + Discussions + Announcements Complete)
+- 🔄 **Phase 6: Advanced Features** - IN PROGRESS (~83% - Certificates + Discussions + Announcements + Analytics + Coupons Complete)
 
 ---
 
@@ -661,7 +661,7 @@ Progress Algorithm:
 
 ## Phase 6: Advanced Features 🔄 IN PROGRESS
 
-**Priority:** LOW | **Status:** ~50% Complete (Certificates + Discussions + Announcements Complete)
+**Priority:** LOW | **Status:** ~83% Complete (Certificates + Discussions + Announcements + Analytics + Coupons Complete)
 
 ### Certificates ✅ COMPLETED
 
@@ -828,26 +828,136 @@ Pages:
 - Future enhancement: Student group targeting for selective announcements
 - Future enhancement: Scheduled publishing for announcements
 
-### Analytics & Reporting
+### Analytics & Reporting ✅ COMPLETED
 
-- ⏳ Instructor dashboard
-  - ⏳ Enrollment stats
-  - ⏳ Completion rates
-  - ⏳ Average grades
-  - ⏳ Student activity
-- ⏳ Admin dashboard
-  - ⏳ Platform-wide statistics
-  - ⏳ Institution analytics
-  - ⏳ User growth metrics
-- ⏳ Student progress reports
-- ⏳ Export reports
+- ✅ Instructor dashboard with course analytics
+  - ✅ Enrollment stats (total, active, completed, recent enrollments)
+  - ✅ Completion rates and average progress
+  - ✅ Average quiz and assignment scores
+  - ✅ Recent activity feed
+- ✅ Admin dashboard with platform-wide analytics
+  - ✅ Platform statistics (total users, institutions, courses, enrollments)
+  - ✅ Enrollment statistics (active, completed, completion rates)
+  - ✅ User growth metrics (30-day growth tracking)
+  - ✅ Recent activity across platform
+- ✅ Student progress reports
+  - ✅ Lesson progress with completion tracking
+  - ✅ Quiz attempts with scores
+  - ✅ Assignment submissions with grades
+  - ✅ Overall progress percentage
+- ⏳ Export reports (Future enhancement)
 
-### Coupons & Discounts
+**Files Created (Analytics):**
 
-- ⏳ Coupon creation (admin/instructor)
-- ⏳ Coupon validation
-- ⏳ Apply coupon at enrollment
-- ⏳ Coupon usage tracking
+Backend:
+- `server/routers/analytics.ts` - Complete analytics router (580+ lines)
+  - getInstructorCourseAnalytics - Course-specific analytics with enrollment, progress, and assessment stats
+  - getInstructorDashboard - Aggregated stats across all instructor courses
+  - getAdminDashboard - Platform-wide statistics for admins
+  - getStudentProgressReport - Detailed student progress with lessons, quizzes, assignments
+  - getCourseAnalytics - Public course analytics
+  - getEnrollmentAnalytics - Detailed enrollment analytics
+
+Frontend Pages:
+- `app/dashboard/instructor/page.tsx` - Instructor dashboard with stats grid and activity (320+ lines)
+- `app/dashboard/admin/page.tsx` - Admin dashboard with platform stats (360+ lines)
+
+**Key Features Implemented:**
+
+1. **SQL Aggregations**: count(), avg(), sum() functions for statistics
+2. **Date Range Filtering**: Optional date ranges for analytics queries
+3. **Growth Metrics**: 30-day growth tracking for users, courses, enrollments
+4. **Progress Tracking**: Detailed lesson, quiz, and assignment progress
+5. **Permission Control**: Role-based access to analytics
+6. **Real-time Stats**: Live data from database aggregations
+7. **Activity Feeds**: Recent enrollments and activity tracking
+
+**Implementation Notes:**
+
+- Uses Drizzle ORM aggregation functions for efficient queries
+- Type-safe SQL queries with proper number conversions
+- Permission checks ensure users only see authorized data
+- Future enhancement: Charts and visualizations with recharts
+- Future enhancement: Export to CSV/PDF reports
+- Future enhancement: Custom date range selection UI
+
+### Coupons & Discounts ✅ COMPLETED
+
+- ✅ Coupon creation with comprehensive settings (admin/instructor)
+  - ✅ Discount types: percentage or fixed amount
+  - ✅ Optional max discount cap for percentage discounts
+  - ✅ Course-specific or platform-wide scope
+  - ✅ Usage limits: total max uses and per-user limits
+  - ✅ Time-based validity: start date and expiration date
+- ✅ Coupon validation system
+  - ✅ Real-time validation during enrollment
+  - ✅ Code uniqueness and active status checks
+  - ✅ Expiration and usage limit validation
+  - ✅ Course scope validation
+  - ✅ Per-user usage tracking
+- ✅ Apply coupon at enrollment
+  - ✅ Coupon code input in enrollment modal
+  - ✅ Real-time discount calculation
+  - ✅ Price breakdown display (original, discount, final)
+  - ✅ Remove coupon functionality
+- ✅ Coupon usage tracking and analytics
+  - ✅ Total uses and remaining uses
+  - ✅ Unique users count
+  - ✅ Total discount given (in dollars)
+  - ✅ Usage history with pricing details
+- ✅ Coupon management UI
+  - ✅ Create coupon form with all settings
+  - ✅ Coupon list with status badges
+  - ✅ Edit and delete functionality
+  - ✅ Statistics display per coupon
+- ✅ Permission-based access control
+
+**Files Created (Coupons):**
+
+Backend:
+- `server/routers/coupon.ts` - Complete coupon router (550+ lines)
+  - createCoupon - Create discount codes with comprehensive validation
+  - getCoupons - List coupons for course/institution with filtering
+  - getCouponById - Get single coupon with details
+  - validateCoupon - Public validation for enrollment flow
+  - applyCoupon - Apply coupon and record usage (ready for integration)
+  - updateCoupon - Update coupon settings
+  - deleteCoupon - Delete coupon with permission checks
+  - getCouponStats - Get usage statistics (uses, users, discount given)
+- `server/db/schema/lms.ts` - Added coupons and couponUsages tables with relations
+
+Frontend Components:
+- `components/coupon/create-coupon-form.tsx` - Comprehensive coupon creation form (280+ lines)
+- `components/coupon/coupon-list.tsx` - Coupon listing with management features (240+ lines)
+
+Pages:
+- `app/coupons/page.tsx` - Platform-wide coupon management for admins
+- `app/courses/[id]/coupons/page.tsx` - Course-specific coupon management
+
+Enrollment Integration:
+- `components/student/enroll-button.tsx` - Updated with coupon validation and price display
+
+**Key Features Implemented:**
+
+1. **Flexible Discount System**: Percentage (with optional max cap) or fixed amount discounts
+2. **Multi-scope Coupons**: Course-specific or platform-wide coupons
+3. **Usage Tracking**: Total uses, per-user limits, and comprehensive analytics
+4. **Time-based Validity**: Optional start and expiration dates
+5. **Real-time Validation**: Instant feedback during enrollment with price calculations
+6. **Permission System**: Role-based access for creating and managing coupons
+7. **Status Management**: Active, expired, scheduled, max uses status indicators
+8. **Usage Analytics**: Track total discount given, unique users, and remaining uses
+
+**Implementation Notes:**
+
+- Discount values stored in cents for precision
+- Percentage discounts support optional maximum cap to limit discount amount
+- Coupon codes automatically converted to uppercase for consistency
+- Usage limits enforced at both global and per-user levels
+- Real-time discount calculation in enrollment flow
+- Future enhancement: Bulk coupon generation
+- Future enhancement: Coupon usage reports and analytics dashboard
+- Future enhancement: Automatic coupon application based on user segments
 
 ### Notifications
 
