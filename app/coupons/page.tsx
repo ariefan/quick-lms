@@ -26,7 +26,10 @@ export default function CouponsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <button onClick={() => router.push("/dashboard")} className="mb-4 inline-block text-blue-600 hover:underline">
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="mb-4 inline-block text-blue-600 hover:underline"
+        >
           ← Back to Dashboard
         </button>
         <h1 className="text-3xl font-bold text-gray-900">Platform Coupons</h1>
@@ -37,7 +40,10 @@ export default function CouponsPage() {
 
       <div className="space-y-8">
         {/* Create Coupon Form */}
-        <CreateCouponForm institutionId={institutionId} onSuccess={() => window.location.reload()} />
+        <CreateCouponForm
+          institutionId={institutionId}
+          onSuccess={() => window.location.reload()}
+        />
 
         {/* Coupons List */}
         <div>

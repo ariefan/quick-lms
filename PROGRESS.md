@@ -679,6 +679,7 @@ Progress Algorithm:
 **Files Created (Certificates):**
 
 Backend:
+
 - `server/routers/certificate.ts` - Complete certificate router (450+ lines)
   - issueCertificate - Issue certificates for completed courses
   - getMyCertificates - Get user's certificates
@@ -691,10 +692,12 @@ Backend:
 - `server/routers/student.ts` - Added auto-issue logic on course completion
 
 Frontend Components:
+
 - `components/certificate/certificate-template.tsx` - Printable certificate template (170+ lines)
 - `components/certificate/certificate-viewer.tsx` - Certificate display with actions (140+ lines)
 
 Pages:
+
 - `app/certificates/page.tsx` - My Certificates list (170+ lines)
 - `app/certificates/[id]/page.tsx` - Individual certificate view
 - `app/certificates/verify/page.tsx` - Public verification page (240+ lines)
@@ -733,6 +736,7 @@ Pages:
 **Files Created (Discussions):**
 
 Backend:
+
 - `server/routers/discussion.ts` - Complete discussion router (600+ lines)
   - createDiscussion - Create new discussion threads
   - getCourseDiscussions - Get all course discussions with filtering
@@ -744,11 +748,13 @@ Backend:
 - `server/db/schema/lms.ts` - Added discussion and reply tables with relations
 
 Frontend Components:
+
 - `components/course/discussion-board.tsx` - Discussion listing (250+ lines)
 - `components/course/discussion-thread.tsx` - Thread view with nested replies (450+ lines)
 - `components/course/create-discussion-form.tsx` - New discussion form (120+ lines)
 
 Pages:
+
 - `app/courses/[id]/discussions/page.tsx` - Course discussions page
 - `app/courses/[id]/discussions/[discussionId]/page.tsx` - Discussion thread page
 - `app/courses/[id]/discussions/new/page.tsx` - New discussion page
@@ -790,6 +796,7 @@ Pages:
 **Files Created (Announcements):**
 
 Backend:
+
 - `server/routers/announcement.ts` - Complete announcement router (500+ lines)
   - createAnnouncement - Create announcements with priority and draft mode
   - getCourseAnnouncements - Get all course announcements with draft filtering
@@ -801,10 +808,12 @@ Backend:
 - `server/db/schema/lms.ts` - Added announcements table with relations
 
 Frontend Components:
+
 - `components/course/create-announcement-form.tsx` - Announcement creation (160+ lines)
 - `components/course/announcement-list.tsx` - Display with moderation (250+ lines)
 
 Pages:
+
 - `app/courses/[id]/announcements/page.tsx` - Course announcements page
 - `app/courses/[id]/announcements/new/page.tsx` - New announcement page
 
@@ -850,6 +859,7 @@ Pages:
 **Files Created (Analytics):**
 
 Backend:
+
 - `server/routers/analytics.ts` - Complete analytics router (580+ lines)
   - getInstructorCourseAnalytics - Course-specific analytics with enrollment, progress, and assessment stats
   - getInstructorDashboard - Aggregated stats across all instructor courses
@@ -859,6 +869,7 @@ Backend:
   - getEnrollmentAnalytics - Detailed enrollment analytics
 
 Frontend Pages:
+
 - `app/dashboard/instructor/page.tsx` - Instructor dashboard with stats grid and activity (320+ lines)
 - `app/dashboard/admin/page.tsx` - Admin dashboard with platform stats (360+ lines)
 
@@ -915,6 +926,7 @@ Frontend Pages:
 **Files Created (Coupons):**
 
 Backend:
+
 - `server/routers/coupon.ts` - Complete coupon router (550+ lines)
   - createCoupon - Create discount codes with comprehensive validation
   - getCoupons - List coupons for course/institution with filtering
@@ -927,14 +939,17 @@ Backend:
 - `server/db/schema/lms.ts` - Added coupons and couponUsages tables with relations
 
 Frontend Components:
+
 - `components/coupon/create-coupon-form.tsx` - Comprehensive coupon creation form (280+ lines)
 - `components/coupon/coupon-list.tsx` - Coupon listing with management features (240+ lines)
 
 Pages:
+
 - `app/coupons/page.tsx` - Platform-wide coupon management for admins
 - `app/courses/[id]/coupons/page.tsx` - Course-specific coupon management
 
 Enrollment Integration:
+
 - `components/student/enroll-button.tsx` - Updated with coupon validation and price display
 
 **Key Features Implemented:**
@@ -999,6 +1014,7 @@ Enrollment Integration:
 **Files Created (Notifications):**
 
 Backend:
+
 - `server/routers/notification.ts` - Complete notification router (320+ lines)
   - createNotification - Create notifications with permission checks
   - getMyNotifications - Get user notifications with pagination and filtering
@@ -1011,9 +1027,11 @@ Backend:
 - `server/db/schema/lms.ts` - Added notifications table with relations
 
 Frontend Components:
+
 - `components/notifications/notification-bell.tsx` - Bell icon with dropdown (220+ lines)
 
 Pages:
+
 - `app/notifications/page.tsx` - Full notifications management page (370+ lines)
 
 **Key Features Implemented:**

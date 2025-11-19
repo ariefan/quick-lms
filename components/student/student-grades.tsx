@@ -89,10 +89,7 @@ export function StudentGrades({ courseId }: StudentGradesProps) {
                     <p className="mt-1 text-sm text-gray-600">
                       Max Score: {assignment.maxScore}
                       {assignment.dueDate && (
-                        <>
-                          {" "}
-                          | Due: {new Date(assignment.dueDate).toLocaleDateString()}
-                        </>
+                        <> | Due: {new Date(assignment.dueDate).toLocaleDateString()}</>
                       )}
                     </p>
                   </div>

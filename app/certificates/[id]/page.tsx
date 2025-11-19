@@ -9,7 +9,11 @@ export default function CertificatePage() {
   const router = useRouter();
   const certificateId = params.id as string;
 
-  const { data: certificate, isLoading, error } = trpc.certificate.getCertificateById.useQuery({
+  const {
+    data: certificate,
+    isLoading,
+    error,
+  } = trpc.certificate.getCertificateById.useQuery({
     id: certificateId,
   });
 

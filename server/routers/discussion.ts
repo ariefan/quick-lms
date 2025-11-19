@@ -53,7 +53,11 @@ export const discussionRouter = createTRPCRouter({
         ),
       });
 
-      if (!enrollment && ctx.session.userId !== course.instructorId && ctx.session.role !== "admin") {
+      if (
+        !enrollment &&
+        ctx.session.userId !== course.instructorId &&
+        ctx.session.role !== "admin"
+      ) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You must be enrolled in this course to create discussions",
@@ -129,7 +133,11 @@ export const discussionRouter = createTRPCRouter({
             },
           },
         },
-        orderBy: [desc(discussions.isPinned), desc(discussions.lastReplyAt), desc(discussions.createdAt)],
+        orderBy: [
+          desc(discussions.isPinned),
+          desc(discussions.lastReplyAt),
+          desc(discussions.createdAt),
+        ],
       });
 
       return courseDiscussions;

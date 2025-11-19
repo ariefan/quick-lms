@@ -155,7 +155,9 @@ export function MyLearning() {
                 </div>
 
                 {/* Institution */}
-                <div className="text-xs text-gray-500">{(enrollment.course as any).institution.name}</div>
+                <div className="text-xs text-gray-500">
+                  {(enrollment.course as any).institution.name}
+                </div>
 
                 {/* CTA */}
                 <div className="border-t pt-3">

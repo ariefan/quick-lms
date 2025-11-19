@@ -87,8 +87,8 @@ export function Gradebook({ courseId }: GradebookProps) {
       <div className="rounded-lg border bg-gray-50 p-6">
         <h3 className="text-lg font-semibold">Export Options</h3>
         <p className="mt-2 text-sm text-gray-600">
-          Export functionality will be available in a future update. You'll be able to export
-          grades to CSV, PDF, or Excel formats.
+          Export functionality will be available in a future update. You'll be able to export grades
+          to CSV, PDF, or Excel formats.
         </p>
       </div>
     </div>

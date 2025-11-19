@@ -85,7 +85,9 @@ export function CreateCouponForm({ courseId, institutionId, onSuccess }: CreateC
             maxLength={50}
             required
           />
-          <p className="mt-1 text-sm text-gray-500">3-50 characters, will be converted to uppercase</p>
+          <p className="mt-1 text-sm text-gray-500">
+            3-50 characters, will be converted to uppercase
+          </p>
         </div>
 
         {/* Description */}
@@ -164,7 +166,9 @@ export function CreateCouponForm({ courseId, institutionId, onSuccess }: CreateC
               Maximum Discount (optional)
             </label>
             <div className="relative mt-1">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                $
+              </span>
               <input
                 type="number"
                 id="maxDiscount"

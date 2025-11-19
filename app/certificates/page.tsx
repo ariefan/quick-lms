@@ -23,9 +23,7 @@ export default function MyCertificatesPage() {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h1 className="mb-2 text-4xl font-bold text-gray-900">My Certificates</h1>
-          <p className="text-gray-600">
-            View and download your course completion certificates
-          </p>
+          <p className="text-gray-600">View and download your course completion certificates</p>
         </div>
 
         {/* Quick Actions */}
@@ -33,7 +31,8 @@ export default function MyCertificatesPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm text-gray-600">
-                Total Certificates: <span className="font-semibold">{certificates?.length || 0}</span>
+                Total Certificates:{" "}
+                <span className="font-semibold">{certificates?.length || 0}</span>
               </p>
             </div>
             <button
@@ -99,10 +98,15 @@ export default function MyCertificatesPage() {
                 </div>
 
                 {/* Certificate Info */}
-                <h3 className="mb-2 font-semibold text-gray-900">{(certificate.course as any).title}</h3>
-                <p className="mb-1 text-sm text-gray-600">{(certificate.institution as any).name}</p>
+                <h3 className="mb-2 font-semibold text-gray-900">
+                  {(certificate.course as any).title}
+                </h3>
+                <p className="mb-1 text-sm text-gray-600">
+                  {(certificate.institution as any).name}
+                </p>
                 <p className="mb-4 text-sm text-gray-500">
-                  Issued {new Date(certificate.issuedAt).toLocaleDateString("en-US", {
+                  Issued{" "}
+                  {new Date(certificate.issuedAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
@@ -155,12 +159,7 @@ export default function MyCertificatesPage() {
                     className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
                     title="Copy verification link"
                   >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"

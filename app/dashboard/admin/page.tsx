@@ -97,7 +97,10 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             <div className="mt-4">
-              <Link href="/admin/institutions" className="text-sm text-blue-600 hover:text-blue-500">
+              <Link
+                href="/admin/institutions"
+                className="text-sm text-blue-600 hover:text-blue-500"
+              >
                 Manage institutions →
               </Link>
             </div>
@@ -220,7 +223,8 @@ export default function AdminDashboardPage() {
             </div>
             <div className="mt-4">
               <p className="text-sm text-gray-500">
-                {dashboard.enrollmentStats.completed} of {dashboard.platformStats.totalEnrollments} completed
+                {dashboard.enrollmentStats.completed} of {dashboard.platformStats.totalEnrollments}{" "}
+                completed
               </p>
             </div>
           </div>

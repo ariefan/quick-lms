@@ -400,7 +400,11 @@ export const quizRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Question not found" });
       }
 
-      const canManage = await canManageQuiz(ctx.db, (question.quiz as any).courseId, ctx.session.userId);
+      const canManage = await canManageQuiz(
+        ctx.db,
+        (question.quiz as any).courseId,
+        ctx.session.userId
+      );
       if (!canManage) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
@@ -432,7 +436,11 @@ export const quizRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Question not found" });
       }
 
-      const canManage = await canManageQuiz(ctx.db, (question.quiz as any).courseId, ctx.session.userId);
+      const canManage = await canManageQuiz(
+        ctx.db,
+        (question.quiz as any).courseId,
+        ctx.session.userId
+      );
       if (!canManage) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }

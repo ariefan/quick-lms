@@ -79,7 +79,9 @@ export function DiscussionBoard({ courseId, lessonId }: DiscussionBoardProps) {
             </svg>
           </div>
           <h3 className="mb-2 text-lg font-semibold text-gray-900">No discussions yet</h3>
-          <p className="mb-6 text-gray-600">Start a discussion to engage with others in this course</p>
+          <p className="mb-6 text-gray-600">
+            Start a discussion to engage with others in this course
+          </p>
           <button
             onClick={() =>
               router.push(
@@ -210,7 +212,8 @@ export function DiscussionBoard({ courseId, lessonId }: DiscussionBoardProps) {
                     <div className="mt-3 text-sm text-gray-500">
                       Last reply by{" "}
                       <span className="font-medium">
-                        {(discussion.lastReplyByUser as any).name || (discussion.lastReplyByUser as any).email}
+                        {(discussion.lastReplyByUser as any).name ||
+                          (discussion.lastReplyByUser as any).email}
                       </span>{" "}
                       •{" "}
                       {new Date(discussion.lastReplyAt || "").toLocaleDateString("en-US", {

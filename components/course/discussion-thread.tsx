@@ -159,9 +159,7 @@ export function DiscussionThread({
                 {(reply.user.name || reply.user.email).charAt(0).toUpperCase()}
               </div>
               <div>
-                <p className="font-medium text-gray-900">
-                  {reply.user.name || reply.user.email}
-                </p>
+                <p className="font-medium text-gray-900">{reply.user.name || reply.user.email}</p>
                 <p className="text-xs text-gray-500">
                   {new Date(reply.createdAt).toLocaleString("en-US", {
                     year: "numeric",
@@ -321,7 +319,9 @@ export function DiscussionThread({
             <div className="flex items-center gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-600">
-                  {((discussion.user as any).name || (discussion.user as any).email).charAt(0).toUpperCase()}
+                  {((discussion.user as any).name || (discussion.user as any).email)
+                    .charAt(0)
+                    .toUpperCase()}
                 </div>
                 <span className="font-medium">
                   {(discussion.user as any).name || (discussion.user as any).email}

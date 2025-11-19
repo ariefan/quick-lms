@@ -41,7 +41,8 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
           </h2>
           <p className="mt-2 text-2xl font-semibold">{percentage.toFixed(1)}%</p>
           <p className="mt-4 text-lg font-medium">
-            {passed ? "✓ Passed" : "✗ Failed"} (Passing score: {(results.quiz as any).passingScore}%)
+            {passed ? "✓ Passed" : "✗ Failed"} (Passing score: {(results.quiz as any).passingScore}
+            %)
           </p>
         </div>
 
@@ -218,7 +219,8 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
             href={`/learn/${courseId}/quizzes/${quizId}`}
             className="rounded-md border border-gray-300 bg-white px-6 py-2 font-semibold text-gray-700 hover:bg-gray-50"
           >
-            Retry Quiz ({(results.quiz as any).maxAttempts - results.attemptNumber} attempts remaining)
+            Retry Quiz ({(results.quiz as any).maxAttempts - results.attemptNumber} attempts
+            remaining)
           </Link>
         )}
       </div>

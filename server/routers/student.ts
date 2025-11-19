@@ -8,7 +8,13 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { eq, and, desc, sql, or } from "drizzle-orm";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
-import { enrollments, lessonProgress, courseReviews, wishlists, certificates } from "../db/schema/lms";
+import {
+  enrollments,
+  lessonProgress,
+  courseReviews,
+  wishlists,
+  certificates,
+} from "../db/schema/lms";
 import { courses } from "../db/schema/courses";
 
 export const studentRouter = createTRPCRouter({

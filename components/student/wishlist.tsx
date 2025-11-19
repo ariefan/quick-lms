@@ -81,7 +81,8 @@ export function Wishlist() {
                 {/* Metadata */}
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <span className="rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-blue-700">
-                    {(item.course as any).level.charAt(0).toUpperCase() + (item.course as any).level.slice(1)}
+                    {(item.course as any).level.charAt(0).toUpperCase() +
+                      (item.course as any).level.slice(1)}
                   </span>
                   <span>•</span>
                   <span>

@@ -13,7 +13,11 @@ export default function VerifyCertificatePage() {
   const [verificationCode, setVerificationCode] = useState(codeFromUrl);
   const [searchType, setSearchType] = useState<"number" | "code">("code");
 
-  const { data: result, isLoading, refetch } = trpc.certificate.verifyCertificate.useQuery(
+  const {
+    data: result,
+    isLoading,
+    refetch,
+  } = trpc.certificate.verifyCertificate.useQuery(
     {
       certificateNumber: searchType === "number" ? certificateNumber : undefined,
       verificationCode: searchType === "code" ? verificationCode : undefined,
@@ -42,9 +46,7 @@ export default function VerifyCertificatePage() {
           {/* Search Form */}
           <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <div className="mb-4">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Search by:
-              </label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Search by:</label>
               <div className="flex gap-4">
                 <label className="flex items-center">
                   <input
@@ -71,7 +73,10 @@ export default function VerifyCertificatePage() {
 
             {searchType === "code" ? (
               <div className="mb-4">
-                <label htmlFor="verificationCode" className="mb-2 block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="verificationCode"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
                   Verification Code
                 </label>
                 <input
@@ -85,7 +90,10 @@ export default function VerifyCertificatePage() {
               </div>
             ) : (
               <div className="mb-4">
-                <label htmlFor="certificateNumber" className="mb-2 block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="certificateNumber"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
                   Certificate Number
                 </label>
                 <input
@@ -114,9 +122,7 @@ export default function VerifyCertificatePage() {
               {/* Verification Status */}
               <div
                 className={`rounded-lg border p-6 ${
-                  result.valid
-                    ? "border-green-200 bg-green-50"
-                    : "border-red-200 bg-red-50"
+                  result.valid ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -172,7 +178,8 @@ export default function VerifyCertificatePage() {
                     <div>
                       <dt className="text-sm font-medium text-gray-500">Recipient</dt>
                       <dd className="mt-1 text-sm text-gray-900">
-                        {(result.certificate.user as any).name || (result.certificate.user as any).email}
+                        {(result.certificate.user as any).name ||
+                          (result.certificate.user as any).email}
                       </dd>
                     </div>
                     <div>
@@ -213,14 +220,13 @@ export default function VerifyCertificatePage() {
 
                   {/* Certificate Preview */}
                   <div className="mt-6">
-                    <h4 className="mb-4 text-sm font-medium text-gray-700">
-                      Certificate Preview
-                    </h4>
+                    <h4 className="mb-4 text-sm font-medium text-gray-700">Certificate Preview</h4>
                     <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
                       <CertificateTemplate
                         certificateNumber={result.certificate.certificateNumber}
                         studentName={
-                          (result.certificate.user as any).name || (result.certificate.user as any).email
+                          (result.certificate.user as any).name ||
+                          (result.certificate.user as any).email
                         }
                         courseName={(result.certificate.course as any).title}
                         institutionName={(result.certificate.institution as any).name}

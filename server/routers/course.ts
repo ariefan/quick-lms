@@ -676,7 +676,8 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        (module.course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (module.course as any).instructorId === ctx.session.userId ||
+        (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({
@@ -845,7 +846,8 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        (lesson.course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (lesson.course as any).instructorId === ctx.session.userId ||
+        (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({

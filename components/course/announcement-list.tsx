@@ -74,7 +74,8 @@ export function AnnouncementList({ courseId, isInstructor = false }: Announcemen
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Announcements</h2>
           <p className="mt-1 text-sm text-gray-600">
-            {announcements?.length || 0} {announcements?.length === 1 ? "announcement" : "announcements"}
+            {announcements?.length || 0}{" "}
+            {announcements?.length === 1 ? "announcement" : "announcements"}
           </p>
         </div>
         {isInstructor && (
@@ -172,7 +173,9 @@ export function AnnouncementList({ courseId, isInstructor = false }: Announcemen
                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                         />
                       </svg>
-                      <span>{(announcement.user as any).name || (announcement.user as any).email}</span>
+                      <span>
+                        {(announcement.user as any).name || (announcement.user as any).email}
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <svg

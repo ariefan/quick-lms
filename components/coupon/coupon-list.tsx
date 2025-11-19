@@ -143,14 +143,10 @@ export function CouponList({ courseId, institutionId }: CouponListProps) {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {coupon.startsAt && (
-                        <div>
-                          From: {new Date(coupon.startsAt).toLocaleDateString()}
-                        </div>
+                        <div>From: {new Date(coupon.startsAt).toLocaleDateString()}</div>
                       )}
                       {coupon.expiresAt && (
-                        <div>
-                          Until: {new Date(coupon.expiresAt).toLocaleDateString()}
-                        </div>
+                        <div>Until: {new Date(coupon.expiresAt).toLocaleDateString()}</div>
                       )}
                       {!coupon.startsAt && !coupon.expiresAt && (
                         <span className="text-gray-500">Always valid</span>

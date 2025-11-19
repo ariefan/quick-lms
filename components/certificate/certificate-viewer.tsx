@@ -100,7 +100,9 @@ export function CertificateViewer({ certificate }: CertificateViewerProps) {
         <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <dt className="text-sm font-medium text-gray-500">Certificate Number</dt>
-            <dd className="mt-1 font-mono text-sm text-gray-900">{certificate.certificateNumber}</dd>
+            <dd className="mt-1 font-mono text-sm text-gray-900">
+              {certificate.certificateNumber}
+            </dd>
           </div>
           <div>
             <dt className="text-sm font-medium text-gray-500">Verification Code</dt>

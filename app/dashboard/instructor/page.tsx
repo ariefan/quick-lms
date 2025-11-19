@@ -62,10 +62,7 @@ export default function InstructorDashboardPage() {
             </div>
           </div>
           <div className="mt-4">
-            <Link
-              href="/courses"
-              className="text-sm font-medium text-blue-600 hover:text-blue-500"
-            >
+            <Link href="/courses" className="text-sm font-medium text-blue-600 hover:text-blue-500">
               View courses →
             </Link>
           </div>
@@ -165,9 +162,7 @@ export default function InstructorDashboardPage() {
         <h2 className="mb-6 text-xl font-semibold text-gray-900">Recent Enrollments</h2>
 
         {dashboard.recentActivity.length === 0 ? (
-          <div className="py-8 text-center text-gray-500">
-            No recent activity
-          </div>
+          <div className="py-8 text-center text-gray-500">No recent activity</div>
         ) : (
           <div className="overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
@@ -238,12 +233,7 @@ export default function InstructorDashboardPage() {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           <h3 className="mt-2 text-sm font-medium text-gray-900">Create New Course</h3>
           <p className="mt-1 text-sm text-gray-500">Start building your next course</p>

@@ -9,10 +9,7 @@
 
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import {
-  certificates,
-  enrollments,
-} from "../db/schema/lms";
+import { certificates, enrollments } from "../db/schema/lms";
 import { courses } from "../db/schema/courses";
 import { institutions, institutionMembers } from "../db/schema/institutions";
 import { eq, and, or, desc } from "drizzle-orm";

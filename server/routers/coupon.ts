@@ -256,10 +256,7 @@ export const couponRouter = createTRPCRouter({
         .select({ count: sql<number>`count(*)` })
         .from(couponUsages)
         .where(
-          and(
-            eq(couponUsages.couponId, coupon.id),
-            eq(couponUsages.userId, ctx.session.userId)
-          )
+          and(eq(couponUsages.couponId, coupon.id), eq(couponUsages.userId, ctx.session.userId))
         );
 
       const userUsage = Number(userUsageCount[0]?.count || 0);
