@@ -8,6 +8,7 @@
  */
 
 import { sqliteTable, text, integer, real, index } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { users } from "./auth";
@@ -310,3 +311,78 @@ export type CourseModule = typeof courseModules.$inferSelect;
 export type NewCourseModule = typeof courseModules.$inferInsert;
 export type Lesson = typeof lessons.$inferSelect;
 export type NewLesson = typeof lessons.$inferInsert;
+
+// Relations
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
+  parent: one(categories, {
+    fields: [categories.parentId],
+    references: [categories.id],
+  }),
+  children: many(categories),
+  institution: one(institutions, {
+    fields: [categories.institutionId],
+    references: [institutions.id],
+  }),
+  subjects: many(subjects),
+  courses: many(courses),
+}));
+
+export const subjectsRelations = relations(subjects, ({ one, many }) => ({
+  category: one(categories, {
+    fields: [subjects.categoryId],
+    references: [categories.id],
+  }),
+  institution: one(institutions, {
+    fields: [subjects.institutionId],
+    references: [institutions.id],
+  }),
+  courses: many(courses),
+}));
+
+export const coursesRelations = relations(courses, ({ one, many }) => ({
+  category: one(categories, {
+    fields: [courses.categoryId],
+    references: [categories.id],
+  }),
+  subject: one(subjects, {
+    fields: [courses.subjectId],
+    references: [subjects.id],
+  }),
+  instructor: one(users, {
+    fields: [courses.instructorId],
+    references: [users.id],
+  }),
+  institution: one(institutions, {
+    fields: [courses.institutionId],
+    references: [institutions.id],
+  }),
+  modules: many(courseModules),
+  lessons: many(lessons),
+}));
+
+export const courseModulesRelations = relations(courseModules, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [courseModules.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [courseModules.institutionId],
+    references: [institutions.id],
+  }),
+  lessons: many(lessons),
+}));
+
+export const lessonsRelations = relations(lessons, ({ one }) => ({
+  course: one(courses, {
+    fields: [lessons.courseId],
+    references: [courses.id],
+  }),
+  module: one(courseModules, {
+    fields: [lessons.moduleId],
+    references: [courseModules.id],
+  }),
+  institution: one(institutions, {
+    fields: [lessons.institutionId],
+    references: [institutions.id],
+  }),
+}));
