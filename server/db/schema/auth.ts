@@ -16,61 +16,77 @@ import { z } from "zod";
  * Instructors are users with institution access
  * Admins can approve institutions
  */
-export const users = sqliteTable("users", {
-  id: text("id").primaryKey(), // Compatible with auth providers
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(), // Hashed password
-  name: text("name").notNull(),
-  avatar: text("avatar"),
-  bio: text("bio"),
+export const users = sqliteTable(
+  "users",
+  {
+    id: text("id").primaryKey(), // Compatible with auth providers
+    email: text("email").notNull().unique(),
+    password: text("password").notNull(), // Hashed password
+    name: text("name").notNull(),
+    avatar: text("avatar"),
+    bio: text("bio"),
 
-  // Role-based access
-  role: text("role", { enum: ["user", "instructor", "admin"] })
-    .default("user")
-    .notNull(),
+    // Role-based access
+    role: text("role", { enum: ["user", "instructor", "admin"] })
+      .default("user")
+      .notNull(),
 
-  // Account status
-  isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
+    // Account status
+    isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+    emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
 
-  // Timestamps
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-}, (table) => [
-  index("users_email_idx").on(table.email),
-  index("users_role_idx").on(table.role),
-]);
+    // Timestamps
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [index("users_email_idx").on(table.email), index("users_role_idx").on(table.role)]
+);
 
 /**
  * User profiles - extended user information
  */
-export const userProfiles = sqliteTable("user_profiles", {
-  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+export const userProfiles = sqliteTable(
+  "user_profiles",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" })
+      .unique(),
 
-  // Contact information
-  phone: text("phone"),
-  website: text("website"),
-  location: text("location"),
+    // Contact information
+    phone: text("phone"),
+    website: text("website"),
+    location: text("location"),
 
-  // Social links
-  socialLinks: text("social_links", { mode: "json" }).$type<{
-    linkedin?: string;
-    twitter?: string;
-    github?: string;
-    youtube?: string;
-  }>(),
+    // Social links
+    socialLinks: text("social_links", { mode: "json" }).$type<{
+      linkedin?: string;
+      twitter?: string;
+      github?: string;
+      youtube?: string;
+    }>(),
 
-  // Preferences
-  timezone: text("timezone").default("UTC"),
-  language: text("language").default("en"),
+    // Preferences
+    timezone: text("timezone").default("UTC"),
+    language: text("language").default("en"),
 
-  // Timestamps
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
-}, (table) => [
-  index("user_profiles_user_idx").on(table.userId),
-]);
+    // Timestamps
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [index("user_profiles_user_idx").on(table.userId)]
+);
 
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users, {

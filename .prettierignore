@@ -1,0 +1,36 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+
+# Build outputs
+.next
+out
+build
+dist
+*.tsbuildinfo
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+migrations
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# Package manager
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git

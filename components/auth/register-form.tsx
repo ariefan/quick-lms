@@ -37,15 +37,10 @@ export function RegisterForm() {
   return (
     <div className="w-full max-w-md space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight">
-          Create your account
-        </h2>
+        <h2 className="text-3xl font-bold tracking-tight">Create your account</h2>
         <p className="mt-2 text-sm text-gray-600">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
+          <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
             Sign in
           </Link>
         </p>
@@ -105,9 +100,7 @@ export function RegisterForm() {
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
-            <p className="mt-1 text-xs text-gray-500">
-              Must be at least 8 characters
-            </p>
+            <p className="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
           </div>
         </div>
 

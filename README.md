@@ -118,16 +118,14 @@ const postRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.select().from(posts);
   }),
-  create: publicProcedure
-    .input(insertPostSchema.omit({ id: true }))
-    .mutation(({ ctx, input }) => {
-      return ctx.db.insert(posts).values(input);
-    }),
+  create: publicProcedure.input(insertPostSchema.omit({ id: true })).mutation(({ ctx, input }) => {
+    return ctx.db.insert(posts).values(input);
+  }),
 });
 
 export const appRouter = createTRPCRouter({
   user: userRouter,
-  post: postRouter,  // Add new router
+  post: postRouter, // Add new router
 });
 ```
 
@@ -203,7 +201,7 @@ This project follows these patterns for easy understanding:
 const { data } = trpc.user.getAll.useQuery();
 
 // ❌ DON'T: Use fetch() or axios directly
-const data = await fetch('/api/users');
+const data = await fetch("/api/users");
 
 // ✅ DO: Define schemas in server/db/schema.ts
 export const insertUserSchema = createInsertSchema(users);

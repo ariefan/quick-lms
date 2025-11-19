@@ -25,106 +25,102 @@ export const authRouter = createTRPCRouter({
   /**
    * Register a new user
    */
-  register: publicProcedure
-    .input(registerSchema)
-    .mutation(async ({ ctx, input }) => {
-      // Check if user already exists
-      const existingUser = await ctx.db
-        .select()
-        .from(users)
-        .where(eq(users.email, input.email))
-        .limit(1);
+  register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {
+    // Check if user already exists
+    const existingUser = await ctx.db
+      .select()
+      .from(users)
+      .where(eq(users.email, input.email))
+      .limit(1);
 
-      if (existingUser.length > 0) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "User with this email already exists",
-        });
-      }
-
-      // Hash password
-      const hashedPassword = await hashPassword(input.password);
-
-      // Create user
-      const userId = crypto.randomUUID();
-      const newUser = await ctx.db
-        .insert(users)
-        .values({
-          id: userId,
-          email: input.email,
-          password: hashedPassword,
-          name: input.name,
-          role: "user",
-          isActive: true,
-          emailVerified: true, // Auto-verify for simple auth
-        })
-        .returning();
-
-      const user = newUser[0];
-
-      // Create session
-      await setSessionCookie({
-        userId: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
+    if (existingUser.length > 0) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "User with this email already exists",
       });
+    }
 
-      // Return user without password
-      return publicUserSchema.parse(user);
-    }),
+    // Hash password
+    const hashedPassword = await hashPassword(input.password);
+
+    // Create user
+    const userId = crypto.randomUUID();
+    const newUser = await ctx.db
+      .insert(users)
+      .values({
+        id: userId,
+        email: input.email,
+        password: hashedPassword,
+        name: input.name,
+        role: "user",
+        isActive: true,
+        emailVerified: true, // Auto-verify for simple auth
+      })
+      .returning();
+
+    const user = newUser[0];
+
+    // Create session
+    await setSessionCookie({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    });
+
+    // Return user without password
+    return publicUserSchema.parse(user);
+  }),
 
   /**
    * Login with email and password
    */
-  login: publicProcedure
-    .input(loginSchema)
-    .mutation(async ({ ctx, input }) => {
-      // Find user by email
-      const userResult = await ctx.db
-        .select()
-        .from(users)
-        .where(eq(users.email, input.email))
-        .limit(1);
+  login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
+    // Find user by email
+    const userResult = await ctx.db
+      .select()
+      .from(users)
+      .where(eq(users.email, input.email))
+      .limit(1);
 
-      if (userResult.length === 0) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Invalid email or password",
-        });
-      }
-
-      const user = userResult[0];
-
-      // Verify password
-      const isValidPassword = await verifyPassword(input.password, user.password);
-
-      if (!isValidPassword) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Invalid email or password",
-        });
-      }
-
-      // Check if user is active
-      if (!user.isActive) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Account is deactivated",
-        });
-      }
-
-      // Create session
-      await setSessionCookie({
-        userId: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
+    if (userResult.length === 0) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Invalid email or password",
       });
+    }
 
-      // Return user without password
-      return publicUserSchema.parse(user);
-    }),
+    const user = userResult[0];
+
+    // Verify password
+    const isValidPassword = await verifyPassword(input.password, user.password);
+
+    if (!isValidPassword) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Invalid email or password",
+      });
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Account is deactivated",
+      });
+    }
+
+    // Create session
+    await setSessionCookie({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    });
+
+    // Return user without password
+    return publicUserSchema.parse(user);
+  }),
 
   /**
    * Get current session

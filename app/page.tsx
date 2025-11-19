@@ -21,12 +21,8 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md space-y-8 text-center">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-            Quick LMS
-          </h1>
-          <p className="mt-2 text-lg text-gray-600">
-            Learning Management System
-          </p>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900">Quick LMS</h1>
+          <p className="mt-2 text-lg text-gray-600">Learning Management System</p>
         </div>
 
         {isLoading ? (
@@ -37,21 +33,15 @@ export default function Home() {
               <h2 className="text-lg font-semibold">Welcome back!</h2>
               <div className="mt-4 space-y-2 text-left">
                 <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    Name:
-                  </span>{" "}
+                  <span className="text-sm font-medium text-gray-500">Name:</span>{" "}
                   <span className="text-sm text-gray-900">{session.name}</span>
                 </div>
                 <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    Email:
-                  </span>{" "}
+                  <span className="text-sm font-medium text-gray-500">Email:</span>{" "}
                   <span className="text-sm text-gray-900">{session.email}</span>
                 </div>
                 <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    Role:
-                  </span>{" "}
+                  <span className="text-sm font-medium text-gray-500">Role:</span>{" "}
                   <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
                     {session.role}
                   </span>
