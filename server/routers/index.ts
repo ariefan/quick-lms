@@ -28,7 +28,7 @@ const userRouter = createTRPCRouter({
 
   /** Get a single user by ID */
   getById: publicProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.db
         .select()
@@ -40,15 +40,19 @@ const userRouter = createTRPCRouter({
 
   /** Create a new user with validation */
   create: publicProcedure
-    .input(insertUserSchema.omit({ id: true, createdAt: true }))
+    .input(insertUserSchema.omit({ id: true, createdAt: true, updatedAt: true }))
     .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db.insert(users).values(input).returning();
+      const userId = crypto.randomUUID();
+      const result = await ctx.db.insert(users).values({
+        ...input,
+        id: userId,
+      }).returning();
       return result[0];
     }),
 
   /** Delete a user by ID */
   delete: publicProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.delete(users).where(eq(users.id, input.id));
       return { success: true };
