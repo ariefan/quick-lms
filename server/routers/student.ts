@@ -6,9 +6,9 @@
 
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, or } from "drizzle-orm";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
-import { enrollments, lessonProgress, courseReviews, wishlists } from "../db/schema/lms";
+import { enrollments, lessonProgress, courseReviews, wishlists, certificates } from "../db/schema/lms";
 import { courses } from "../db/schema/courses";
 
 export const studentRouter = createTRPCRouter({
@@ -648,6 +648,24 @@ export const studentRouter = createTRPCRouter({
 });
 
 /**
+ * Generate a unique certificate number
+ * Format: CERT-YYYY-XXXXXX (e.g., CERT-2025-A1B2C3)
+ */
+function generateCertificateNumber(): string {
+  const year = new Date().getFullYear();
+  const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `CERT-${year}-${randomPart}`;
+}
+
+/**
+ * Generate a unique verification code
+ * Format: 12-character alphanumeric code
+ */
+function generateVerificationCode(): string {
+  return Math.random().toString(36).substring(2, 14).toUpperCase();
+}
+
+/**
  * Helper: Update enrollment progress based on completed lessons
  */
 async function updateEnrollmentProgress(
@@ -663,6 +681,16 @@ async function updateEnrollmentProgress(
 
   if (!course) return;
 
+  // Get enrollment details
+  const enrollment = await db.query.enrollments.findFirst({
+    where: eq(enrollments.id, enrollmentId),
+    with: {
+      user: true,
+    },
+  });
+
+  if (!enrollment) return;
+
   // Get completed lessons count
   const completedLessons = await db.query.lessonProgress.findMany({
     where: and(
@@ -676,6 +704,9 @@ async function updateEnrollmentProgress(
   const totalLessons = course.totalLessons || 1;
   const progress = Math.round((completedCount / totalLessons) * 100);
 
+  const wasCompleted = enrollment.status === "completed";
+  const isNowCompleted = progress === 100;
+
   // Update enrollment
   await db
     .update(enrollments)
@@ -683,8 +714,71 @@ async function updateEnrollmentProgress(
       progress,
       completedLessons: completedCount,
       updatedAt: new Date(),
-      status: progress === 100 ? "completed" : "active",
-      completedAt: progress === 100 ? new Date() : null,
+      status: isNowCompleted ? "completed" : "active",
+      completedAt: isNowCompleted ? new Date() : null,
     })
     .where(eq(enrollments.id, enrollmentId));
+
+  // Auto-issue certificate if course just completed and certificate not already issued
+  if (isNowCompleted && !wasCompleted && !enrollment.certificateIssued) {
+    try {
+      // Check if certificate already exists for this enrollment (extra safety check)
+      const existingCertificate = await db.query.certificates.findFirst({
+        where: eq(certificates.enrollmentId, enrollmentId),
+      });
+
+      if (!existingCertificate) {
+        // Generate unique certificate number and verification code
+        let certificateNumber = generateCertificateNumber();
+        let verificationCode = generateVerificationCode();
+
+        // Ensure uniqueness
+        let attempts = 0;
+        while (attempts < 10) {
+          const existing = await db.query.certificates.findFirst({
+            where: or(
+              eq(certificates.certificateNumber, certificateNumber),
+              eq(certificates.verificationCode, verificationCode)
+            ),
+          });
+
+          if (!existing) break;
+
+          certificateNumber = generateCertificateNumber();
+          verificationCode = generateVerificationCode();
+          attempts++;
+        }
+
+        if (attempts < 10) {
+          // Create certificate
+          await db.insert(certificates).values({
+            userId: enrollment.userId,
+            courseId: enrollment.courseId,
+            enrollmentId: enrollment.id,
+            institutionId: enrollment.institutionId,
+            certificateNumber,
+            verificationCode,
+            title: `Certificate of Completion - ${course.title}`,
+            description: `This certifies that ${enrollment.user.name || enrollment.user.email} has successfully completed ${course.title}`,
+            template: "default",
+            customFields: {},
+            isVerified: true,
+            issuedAt: new Date(),
+          });
+
+          // Update enrollment to mark certificate as issued
+          await db
+            .update(enrollments)
+            .set({
+              certificateIssued: true,
+              certificateIssuedAt: new Date(),
+            })
+            .where(eq(enrollments.id, enrollmentId));
+        }
+      }
+    } catch (error) {
+      // Log error but don't fail the enrollment update
+      console.error("Failed to auto-issue certificate:", error);
+    }
+  }
 }

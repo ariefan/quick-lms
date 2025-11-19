@@ -775,3 +775,22 @@ export const assignmentSubmissionsRelations = relations(assignmentSubmissions, (
     references: [institutions.id],
   }),
 }));
+
+export const certificatesRelations = relations(certificates, ({ one }) => ({
+  user: one(users, {
+    fields: [certificates.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [certificates.courseId],
+    references: [courses.id],
+  }),
+  enrollment: one(enrollments, {
+    fields: [certificates.enrollmentId],
+    references: [enrollments.id],
+  }),
+  institution: one(institutions, {
+    fields: [certificates.institutionId],
+    references: [institutions.id],
+  }),
+}));

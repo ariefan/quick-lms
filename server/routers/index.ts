@@ -22,6 +22,7 @@ import { courseRouter } from "./course";
 import { studentRouter } from "./student";
 import { quizRouter } from "./quiz";
 import { assignmentRouter } from "./assignment";
+import { certificateRouter } from "./certificate";
 
 /**
  * User router - handles user CRUD operations
@@ -74,6 +75,7 @@ export const appRouter = createTRPCRouter({
   student: studentRouter,
   quiz: quizRouter,
   assignment: assignmentRouter,
+  certificate: certificateRouter,
 });
 
 /**

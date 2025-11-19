@@ -1,6 +1,6 @@
 # Quick LMS - Implementation Progress
 
-**Last Updated:** 2025-11-19 (Phase 5 Complete - Ready for Phase 6)
+**Last Updated:** 2025-11-19 (Phase 6.1: Certificates Complete)
 
 This document tracks the implementation progress of the Quick LMS platform. Tasks are organized by phase and priority.
 
@@ -14,7 +14,7 @@ This document tracks the implementation progress of the Quick LMS platform. Task
 - ✅ **Phase 3: Course Management** - COMPLETED
 - ✅ **Phase 4: Student Features** - COMPLETED
 - ✅ **Phase 5: Assessments & Grading** - COMPLETED
-- ⏳ **Phase 6: Advanced Features** - PENDING
+- 🔄 **Phase 6: Advanced Features** - IN PROGRESS (~15% - Certificates Complete)
 
 ---
 
@@ -659,18 +659,63 @@ Progress Algorithm:
 
 ---
 
-## Phase 6: Advanced Features ⏳ PENDING
+## Phase 6: Advanced Features 🔄 IN PROGRESS
 
-**Priority:** LOW | **Status:** 0% Complete
+**Priority:** LOW | **Status:** ~15% Complete (Certificates Complete)
 
-### Certificates
+### Certificates ✅ COMPLETED
 
-- ⏳ Certificate template design
-- ⏳ Auto-issue on course completion
-- ⏳ Certificate generation (PDF)
-- ⏳ Certificate verification page
-- ⏳ My certificates page
-- ⏳ Download certificate
+- ✅ Certificate template design (HTML/CSS with print functionality)
+- ✅ Auto-issue on course completion (automatic when progress reaches 100%)
+- ✅ Certificate generation (browser print to PDF)
+- ✅ Certificate verification page (public verification by code/number)
+- ✅ My certificates page (student certificate list)
+- ✅ Download certificate (print to PDF functionality)
+- ✅ Certificate database schema with relations
+- ✅ Complete certificate tRPC router (7 procedures)
+- ✅ Certificate auto-issue integration with enrollment system
+- ✅ Certificate sharing and verification links
+
+**Files Created (Certificates):**
+
+Backend:
+- `server/routers/certificate.ts` - Complete certificate router (450+ lines)
+  - issueCertificate - Issue certificates for completed courses
+  - getMyCertificates - Get user's certificates
+  - getCertificateById - Get specific certificate
+  - verifyCertificate - Public certificate verification
+  - getUserCertificates - Admin view of user certificates
+  - revokeCertificate - Revoke certificates (admin/instructor)
+  - getCourseCertificates - View all certificates for a course
+- `server/db/schema/lms.ts` - Added certificate relations
+- `server/routers/student.ts` - Added auto-issue logic on course completion
+
+Frontend Components:
+- `components/certificate/certificate-template.tsx` - Printable certificate template (170+ lines)
+- `components/certificate/certificate-viewer.tsx` - Certificate display with actions (140+ lines)
+
+Pages:
+- `app/certificates/page.tsx` - My Certificates list (170+ lines)
+- `app/certificates/[id]/page.tsx` - Individual certificate view
+- `app/certificates/verify/page.tsx` - Public verification page (240+ lines)
+
+**Key Features Implemented:**
+
+1. **Auto-Issue System**: Certificates automatically issued when students complete courses (100% progress)
+2. **Certificate Verification**: Public verification via certificate number or verification code
+3. **Print/Download**: Browser-based print to PDF with optimized print styles
+4. **Certificate Template**: Professional certificate design with institution branding
+5. **Unique Identifiers**: Certificate numbers (CERT-YYYY-XXXXXX) and verification codes
+6. **Permission System**: Role-based access control for viewing and revoking certificates
+7. **Share Functionality**: Copy verification links for sharing certificates
+8. **Status Tracking**: Valid, revoked, and expired certificate states
+
+**Implementation Notes:**
+
+- Uses browser print functionality instead of PDF libraries for lightweight implementation
+- Future enhancement: Add PDF generation library (react-pdf/renderer) for server-side PDF generation
+- Future enhancement: Custom certificate templates per institution
+- Future enhancement: Certificate expiration and renewal system
 
 ### Discussions & Forums
 
@@ -921,6 +966,6 @@ await fetch(uploadUrl, {
 
 ---
 
-**Last Commit:** Phase 5 Part 2: Add gradebook for instructors and students, complete Phase 5
-**Current Status:** Phase 5 Complete - All core LMS features implemented
-**Next Milestone:** Phase 6: Advanced Features - Certificates, discussions, analytics, notifications
+**Last Commit:** Phase 6.1: Certificates - Complete certificate system with auto-issue and verification
+**Current Status:** Phase 6 In Progress - Certificates complete (~15%)
+**Next Milestone:** Phase 6.2: Discussions & Forums - Course discussion boards and threads
