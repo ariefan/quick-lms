@@ -172,19 +172,19 @@ export default function VerifyCertificatePage() {
                     <div>
                       <dt className="text-sm font-medium text-gray-500">Recipient</dt>
                       <dd className="mt-1 text-sm text-gray-900">
-                        {result.certificate.user.name || result.certificate.user.email}
+                        {(result.certificate.user as any).name || (result.certificate.user as any).email}
                       </dd>
                     </div>
                     <div>
                       <dt className="text-sm font-medium text-gray-500">Course</dt>
                       <dd className="mt-1 text-sm text-gray-900">
-                        {result.certificate.course.title}
+                        {(result.certificate.course as any).title}
                       </dd>
                     </div>
                     <div>
                       <dt className="text-sm font-medium text-gray-500">Institution</dt>
                       <dd className="mt-1 text-sm text-gray-900">
-                        {result.certificate.institution.name}
+                        {(result.certificate.institution as any).name}
                       </dd>
                     </div>
                     <div>
@@ -220,10 +220,10 @@ export default function VerifyCertificatePage() {
                       <CertificateTemplate
                         certificateNumber={result.certificate.certificateNumber}
                         studentName={
-                          result.certificate.user.name || result.certificate.user.email
+                          (result.certificate.user as any).name || (result.certificate.user as any).email
                         }
-                        courseName={result.certificate.course.title}
-                        institutionName={result.certificate.institution.name}
+                        courseName={(result.certificate.course as any).title}
+                        institutionName={(result.certificate.institution as any).name}
                         issuedDate={new Date(result.certificate.issuedAt)}
                         verificationCode={result.certificate.verificationCode}
                         customFields={result.certificate.customFields || undefined}

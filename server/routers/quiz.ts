@@ -400,7 +400,7 @@ export const quizRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Question not found" });
       }
 
-      const canManage = await canManageQuiz(ctx.db, question.quiz.courseId, ctx.session.userId);
+      const canManage = await canManageQuiz(ctx.db, (question.quiz as any).courseId, ctx.session.userId);
       if (!canManage) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
@@ -432,7 +432,7 @@ export const quizRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Question not found" });
       }
 
-      const canManage = await canManageQuiz(ctx.db, question.quiz.courseId, ctx.session.userId);
+      const canManage = await canManageQuiz(ctx.db, (question.quiz as any).courseId, ctx.session.userId);
       if (!canManage) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
@@ -562,7 +562,7 @@ export const quizRouter = createTRPCRouter({
 
       // Calculate score with auto-grading
       const { score, maxScore, correctAnswers, details } = calculateQuizScore(
-        attempt.quiz.questions.map((q) => ({
+        (attempt.quiz as any).questions.map((q: any) => ({
           ...q,
           correctAnswers: q.correctAnswers || [],
         })),
@@ -573,7 +573,7 @@ export const quizRouter = createTRPCRouter({
       );
 
       const scorePercentage = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
-      const passed = scorePercentage >= attempt.quiz.passingScore;
+      const passed = scorePercentage >= (attempt.quiz as any).passingScore;
 
       // Insert quiz answers
       const answerInserts = input.answers.map((answer) => {

@@ -50,12 +50,12 @@ export function Wishlist() {
               className="group rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md"
             >
               {/* Course Thumbnail */}
-              <Link href={`/catalog/${item.course.id}`}>
+              <Link href={`/catalog/${(item.course as any).id}`}>
                 <div className="flex h-32 items-center justify-center rounded-t-lg bg-gradient-to-br from-blue-500 to-purple-600">
-                  {item.course.thumbnail ? (
+                  {(item.course as any).thumbnail ? (
                     <img
-                      src={item.course.thumbnail}
-                      alt={item.course.title}
+                      src={(item.course as any).thumbnail}
+                      alt={(item.course as any).title}
                       className="h-full w-full rounded-t-lg object-cover"
                     />
                   ) : (
@@ -66,44 +66,44 @@ export function Wishlist() {
 
               <div className="p-6 space-y-3">
                 {/* Title */}
-                <Link href={`/catalog/${item.course.id}`}>
+                <Link href={`/catalog/${(item.course as any).id}`}>
                   <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 line-clamp-2">
-                    {item.course.title}
+                    {(item.course as any).title}
                   </h3>
                 </Link>
 
-                {item.course.shortDescription && (
+                {(item.course as any).shortDescription && (
                   <p className="text-sm text-gray-600 line-clamp-2">
-                    {item.course.shortDescription}
+                    {(item.course as any).shortDescription}
                   </p>
                 )}
 
                 {/* Metadata */}
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <span className="rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-blue-700">
-                    {item.course.level.charAt(0).toUpperCase() + item.course.level.slice(1)}
+                    {(item.course as any).level.charAt(0).toUpperCase() + (item.course as any).level.slice(1)}
                   </span>
                   <span>•</span>
                   <span>
-                    {item.course.price === "0.00" || item.course.price === "0"
+                    {(item.course as any).price === "0.00" || (item.course as any).price === "0"
                       ? "Free"
-                      : `$${item.course.price}`}
+                      : `$${(item.course as any).price}`}
                   </span>
                 </div>
 
                 {/* Institution */}
-                <div className="text-xs text-gray-500">{item.course.institution.name}</div>
+                <div className="text-xs text-gray-500">{(item.course as any).institution.name}</div>
 
                 {/* Actions */}
                 <div className="flex gap-2 border-t pt-3">
                   <Link
-                    href={`/catalog/${item.course.id}`}
+                    href={`/catalog/${(item.course as any).id}`}
                     className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-blue-500"
                   >
                     View Course
                   </Link>
                   <button
-                    onClick={() => handleRemove(item.course.id)}
+                    onClick={() => handleRemove((item.course as any).id)}
                     disabled={removeMutation.isPending}
                     className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
                     title="Remove from wishlist"

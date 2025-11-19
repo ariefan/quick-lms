@@ -72,7 +72,7 @@ export function CourseEditor({ courseId }: CourseEditorProps) {
             <p className="mt-2 text-gray-600">{course.shortDescription}</p>
           )}
           <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
-            <span>{course.institution.name}</span>
+            <span>{(course.institution as any).name}</span>
             <span>•</span>
             <span>{course.level}</span>
             <span>•</span>

@@ -91,7 +91,7 @@ export const certificateRouter = createTRPCRouter({
 
       // Permission check: user must be course instructor, institution admin, or the student themselves
       const isStudent = ctx.session.userId === enrollment.userId;
-      const isCourseInstructor = ctx.session.userId === enrollment.course.instructorId;
+      const isCourseInstructor = ctx.session.userId === (enrollment.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       // Get institution membership for permission check
@@ -152,8 +152,8 @@ export const certificateRouter = createTRPCRouter({
           institutionId: enrollment.institutionId,
           certificateNumber,
           verificationCode,
-          title: `Certificate of Completion - ${enrollment.course.title}`,
-          description: `This certifies that ${enrollment.user.name || enrollment.user.email} has successfully completed ${enrollment.course.title}`,
+          title: `Certificate of Completion - ${(enrollment.course as any).title}`,
+          description: `This certifies that ${(enrollment.user as any).name || (enrollment.user as any).email} has successfully completed ${(enrollment.course as any).title}`,
           template,
           customFields: (customFields || {}) as Record<string, string>,
           isVerified: true,
@@ -214,7 +214,7 @@ export const certificateRouter = createTRPCRouter({
 
       // Permission check: user must be the certificate owner, course instructor, or admin
       const isOwner = ctx.session.userId === certificate.userId;
-      const isCourseInstructor = ctx.session.userId === certificate.course.instructorId;
+      const isCourseInstructor = ctx.session.userId === (certificate.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       // Get institution membership for permission check
@@ -355,7 +355,7 @@ export const certificateRouter = createTRPCRouter({
       }
 
       // Permission check: only course instructor, institution admin, or platform admin
-      const isCourseInstructor = ctx.session.userId === certificate.course.instructorId;
+      const isCourseInstructor = ctx.session.userId === (certificate.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       // Get institution membership for permission check
@@ -409,7 +409,7 @@ export const certificateRouter = createTRPCRouter({
       }
 
       // Permission check: must be course instructor, institution admin, or platform admin
-      const isCourseInstructor = ctx.session.userId === course.instructorId;
+      const isCourseInstructor = ctx.session.userId === (course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       // Get institution membership for permission check

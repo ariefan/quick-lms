@@ -73,7 +73,7 @@ export function AssignmentGrading({ courseId, assignmentId }: AssignmentGradingP
                       : "border-gray-300 bg-white hover:bg-gray-50"
                   }`}
                 >
-                  <p className="font-medium">{submission.user.name || submission.user.email}</p>
+                  <p className="font-medium">{(submission.user as any).name || (submission.user as any).email}</p>
                   <p className="mt-1 text-xs text-gray-500">
                     {submission.submittedAt
                       ? new Date(submission.submittedAt).toLocaleString()

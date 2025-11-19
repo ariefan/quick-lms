@@ -162,7 +162,7 @@ export function MembersManager({ institutionId }: MembersManagerProps) {
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium">{member.user.name}</span>
+                  <span className="font-medium">{(member.user as any).name}</span>
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                       member.role === "admin"
@@ -173,7 +173,7 @@ export function MembersManager({ institutionId }: MembersManagerProps) {
                     {member.role}
                   </span>
                 </div>
-                <div className="mt-1 text-sm text-gray-500">{member.user.email}</div>
+                <div className="mt-1 text-sm text-gray-500">{(member.user as any).email}</div>
                 <div className="mt-1 text-xs text-gray-400">
                   Joined: {new Date(member.joinedAt).toLocaleDateString()}
                 </div>
@@ -187,7 +187,7 @@ export function MembersManager({ institutionId }: MembersManagerProps) {
                   Change to {member.role === "admin" ? "Instructor" : "Admin"}
                 </button>
                 <button
-                  onClick={() => handleRemoveMember(member.id, member.user.name)}
+                  onClick={() => handleRemoveMember(member.id, (member.user as any).name)}
                   disabled={removeMemberMutation.isPending}
                   className="rounded-md bg-red-600 px-3 py-1 text-xs font-semibold text-white hover:bg-red-500 disabled:opacity-50"
                 >
@@ -220,7 +220,7 @@ export function MembersManager({ institutionId }: MembersManagerProps) {
                   <div>
                     <div className="font-medium">{invitation.email}</div>
                     <div className="mt-1 text-sm text-gray-600">
-                      Role: {invitation.role} | Invited by: {invitation.invitedBy.name}
+                      Role: {invitation.role} | Invited by: {(invitation.invitedBy as any).name}
                     </div>
                     <div className="mt-1 text-xs text-gray-500">
                       Expires: {new Date(invitation.expiresAt).toLocaleDateString()}

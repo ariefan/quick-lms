@@ -618,7 +618,7 @@ export const discussions = sqliteTable(
 /**
  * Discussion replies - nested replies to discussions
  */
-export const discussionReplies = sqliteTable(
+export const discussionReplies: any = sqliteTable(
   "discussion_replies",
   {
     id: text("id")
@@ -630,7 +630,7 @@ export const discussionReplies = sqliteTable(
     discussionId: text("discussion_id")
       .notNull()
       .references(() => discussions.id, { onDelete: "cascade" }),
-    parentReplyId: text("parent_reply_id").references(() => discussionReplies.id, {
+    parentReplyId: text("parent_reply_id").references((): any => discussionReplies.id, {
       onDelete: "cascade",
     }),
     userId: text("user_id")
@@ -652,6 +652,57 @@ export const discussionReplies = sqliteTable(
     index("discussion_replies_discussion_idx").on(table.discussionId),
     index("discussion_replies_parent_idx").on(table.parentReplyId),
     index("discussion_replies_user_idx").on(table.userId),
+  ]
+);
+
+// =============================================================================
+// ANNOUNCEMENTS
+// =============================================================================
+
+/**
+ * Announcements - course announcements from instructors
+ */
+export const announcements = sqliteTable(
+  "announcements",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
+
+    // Relations
+    courseId: text("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    institutionId: text("institution_id")
+      .notNull()
+      .references(() => institutions.id, { onDelete: "cascade" }),
+
+    // Publishing
+    isPublished: integer("is_published", { mode: "boolean" }).default(false).notNull(),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
+
+    // Priority
+    isPinned: integer("is_pinned", { mode: "boolean" }).default(false).notNull(),
+    priority: text("priority", { enum: ["low", "normal", "high"] })
+      .default("normal")
+      .notNull(),
+
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("announcements_course_idx").on(table.courseId),
+    index("announcements_user_idx").on(table.userId),
+    index("announcements_published_idx").on(table.isPublished, table.courseId),
   ]
 );
 
@@ -702,6 +753,12 @@ export const insertDiscussionReplySchema = createInsertSchema(discussionReplies,
 });
 export const selectDiscussionReplySchema = createSelectSchema(discussionReplies);
 
+export const insertAnnouncementSchema = createInsertSchema(announcements, {
+  title: z.string().min(1).max(200),
+  content: z.string().min(1),
+});
+export const selectAnnouncementSchema = createSelectSchema(announcements);
+
 // Types
 export type Enrollment = typeof enrollments.$inferSelect;
 export type NewEnrollment = typeof enrollments.$inferInsert;
@@ -729,6 +786,8 @@ export type Discussion = typeof discussions.$inferSelect;
 export type NewDiscussion = typeof discussions.$inferInsert;
 export type DiscussionReply = typeof discussionReplies.$inferSelect;
 export type NewDiscussionReply = typeof discussionReplies.$inferInsert;
+export type Announcement = typeof announcements.$inferSelect;
+export type NewAnnouncement = typeof announcements.$inferInsert;
 
 // Relations
 export const enrollmentsRelations = relations(enrollments, ({ one }) => ({
@@ -944,5 +1003,20 @@ export const discussionRepliesRelations = relations(discussionReplies, ({ one, m
   }),
   childReplies: many(discussionReplies, {
     relationName: "childReplies",
+  }),
+}));
+
+export const announcementsRelations = relations(announcements, ({ one }) => ({
+  user: one(users, {
+    fields: [announcements.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [announcements.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [announcements.institutionId],
+    references: [institutions.id],
   }),
 }));

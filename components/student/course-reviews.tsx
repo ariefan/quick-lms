@@ -162,7 +162,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h4 className="font-semibold">{review.user.name}</h4>
+                    <h4 className="font-semibold">{(review.user as any).name}</h4>
                   </div>
                   <div className="mt-1 flex items-center gap-2">
                     <div className="flex">{renderStars(review.rating)}</div>

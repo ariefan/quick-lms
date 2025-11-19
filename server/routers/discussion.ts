@@ -10,7 +10,7 @@
 
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { discussions, discussionReplies } from "../db/schema/lms";
+import { discussions, discussionReplies, enrollments } from "../db/schema/lms";
 import { courses } from "../db/schema/courses";
 import { institutionMembers } from "../db/schema/institutions";
 import { eq, and, desc, sql } from "drizzle-orm";
@@ -47,9 +47,9 @@ export const discussionRouter = createTRPCRouter({
       // Check if user is enrolled in the course
       const enrollment = await ctx.db.query.enrollments.findFirst({
         where: and(
-          eq(ctx.db.schema.enrollments.userId, ctx.session.userId),
-          eq(ctx.db.schema.enrollments.courseId, courseId),
-          eq(ctx.db.schema.enrollments.status, "active")
+          eq(enrollments.userId, ctx.session.userId),
+          eq(enrollments.courseId, courseId),
+          eq(enrollments.status, "active")
         ),
       });
 
@@ -241,7 +241,7 @@ export const discussionRouter = createTRPCRouter({
         })
         .where(eq(discussions.id, discussionId));
 
-      return reply[0];
+      return (reply as any[])[0];
     }),
 
   /**
@@ -274,7 +274,7 @@ export const discussionRouter = createTRPCRouter({
 
       // Permission check: owner, course instructor, institution admin, or platform admin
       const isOwner = ctx.session.userId === discussion.userId;
-      const isInstructor = ctx.session.userId === discussion.course.instructorId;
+      const isInstructor = ctx.session.userId === (discussion.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       let isInstitutionAdmin = false;
@@ -330,7 +330,7 @@ export const discussionRouter = createTRPCRouter({
       }
 
       // Permission check: course instructor, institution admin, or platform admin
-      const isInstructor = ctx.session.userId === discussion.course.instructorId;
+      const isInstructor = ctx.session.userId === (discussion.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       let isInstitutionAdmin = false;
@@ -385,7 +385,7 @@ export const discussionRouter = createTRPCRouter({
       }
 
       // Permission check: course instructor, institution admin, or platform admin
-      const isInstructor = ctx.session.userId === discussion.course.instructorId;
+      const isInstructor = ctx.session.userId === (discussion.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       let isInstitutionAdmin = false;
@@ -440,7 +440,7 @@ export const discussionRouter = createTRPCRouter({
       }
 
       // Permission check: course instructor, institution admin, or platform admin
-      const isInstructor = ctx.session.userId === discussion.course.instructorId;
+      const isInstructor = ctx.session.userId === (discussion.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       let isInstitutionAdmin = false;
@@ -496,7 +496,7 @@ export const discussionRouter = createTRPCRouter({
 
       // Permission check: owner, course instructor, institution admin, or platform admin
       const isOwner = ctx.session.userId === discussion.userId;
-      const isInstructor = ctx.session.userId === discussion.course.instructorId;
+      const isInstructor = ctx.session.userId === (discussion.course as any).instructorId;
       const isAdmin = ctx.session.role === "admin";
 
       let isInstitutionAdmin = false;
@@ -587,7 +587,7 @@ export const discussionRouter = createTRPCRouter({
         .where(eq(discussionReplies.id, id))
         .returning();
 
-      return updated[0];
+      return (updated as any[])[0];
     }),
 
   /**
@@ -657,6 +657,6 @@ export const discussionRouter = createTRPCRouter({
         })
         .where(eq(discussions.id, reply.discussionId));
 
-      return updated[0];
+      return (updated as any[])[0];
     }),
 });

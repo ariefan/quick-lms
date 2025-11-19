@@ -23,13 +23,13 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
   }
 
   const percentage = (results.score / results.maxScore) * 100;
-  const passed = percentage >= results.quiz.passingScore;
+  const passed = percentage >= (results.quiz as any).passingScore;
 
   return (
     <div className="space-y-6">
       {/* Overall Results */}
       <div className="rounded-lg border bg-white p-6 shadow-sm">
-        <h1 className="text-3xl font-bold">{results.quiz.title}</h1>
+        <h1 className="text-3xl font-bold">{(results.quiz as any).title}</h1>
 
         <div
           className={`mt-6 rounded-lg p-6 text-center ${
@@ -41,7 +41,7 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
           </h2>
           <p className="mt-2 text-2xl font-semibold">{percentage.toFixed(1)}%</p>
           <p className="mt-4 text-lg font-medium">
-            {passed ? "✓ Passed" : "✗ Failed"} (Passing score: {results.quiz.passingScore}%)
+            {passed ? "✓ Passed" : "✗ Failed"} (Passing score: {(results.quiz as any).passingScore}%)
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
           </div>
           <div>
             <p className="text-sm text-gray-600">Total Questions</p>
-            <p className="text-2xl font-bold">{results.quiz.questions.length}</p>
+            <p className="text-2xl font-bold">{(results.quiz as any).questions.length}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Time Taken</p>
@@ -64,11 +64,11 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
       </div>
 
       {/* Question Details */}
-      {results.quiz.showResults && (
+      {(results.quiz as any).showResults && (
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Detailed Results</h2>
 
-          {results.quiz.questions.map((question: any, index: number) => {
+          {(results.quiz as any).questions.map((question: any, index: number) => {
             const userAnswer = results.answers.find((a: any) => a.questionId === question.id);
 
             // Determine if answer is correct based on question type
@@ -150,7 +150,7 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
                                 {wasSelected && (
                                   <span className="font-semibold text-blue-600">Your answer:</span>
                                 )}
-                                {isCorrectOption && results.quiz.showCorrectAnswers && (
+                                {isCorrectOption && (results.quiz as any).showCorrectAnswers && (
                                   <span className="font-semibold text-green-600">Correct:</span>
                                 )}
                                 <span>
@@ -174,7 +174,7 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
                           )}
                         </div>
 
-                        {results.quiz.showCorrectAnswers &&
+                        {(results.quiz as any).showCorrectAnswers &&
                           question.questionType === "short_answer" &&
                           question.correctAnswers &&
                           question.correctAnswers.length > 0 && (
@@ -191,7 +191,7 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
                     )}
 
                     {/* Explanation */}
-                    {question.explanation && results.quiz.showCorrectAnswers && (
+                    {question.explanation && (results.quiz as any).showCorrectAnswers && (
                       <div className="mt-4 rounded-md bg-blue-50 p-3">
                         <p className="text-sm font-medium text-blue-900">Explanation:</p>
                         <p className="mt-1 text-sm text-blue-800">{question.explanation}</p>
@@ -213,12 +213,12 @@ export function QuizResults({ courseId, quizId, attemptId }: QuizResultsProps) {
         >
           Back to Course
         </Link>
-        {results.attemptNumber < results.quiz.maxAttempts && (
+        {results.attemptNumber < (results.quiz as any).maxAttempts && (
           <Link
             href={`/learn/${courseId}/quizzes/${quizId}`}
             className="rounded-md border border-gray-300 bg-white px-6 py-2 font-semibold text-gray-700 hover:bg-gray-50"
           >
-            Retry Quiz ({results.quiz.maxAttempts - results.attemptNumber} attempts remaining)
+            Retry Quiz ({(results.quiz as any).maxAttempts - results.attemptNumber} attempts remaining)
           </Link>
         )}
       </div>

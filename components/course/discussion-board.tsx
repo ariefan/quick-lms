@@ -141,7 +141,7 @@ export function DiscussionBoard({ courseId, lessonId }: DiscussionBoardProps) {
                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                         />
                       </svg>
-                      <span>{discussion.user.name || discussion.user.email}</span>
+                      <span>{(discussion.user as any).name || (discussion.user as any).email}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <svg
@@ -210,7 +210,7 @@ export function DiscussionBoard({ courseId, lessonId }: DiscussionBoardProps) {
                     <div className="mt-3 text-sm text-gray-500">
                       Last reply by{" "}
                       <span className="font-medium">
-                        {discussion.lastReplyByUser.name || discussion.lastReplyByUser.email}
+                        {(discussion.lastReplyByUser as any).name || (discussion.lastReplyByUser as any).email}
                       </span>{" "}
                       •{" "}
                       {new Date(discussion.lastReplyAt || "").toLocaleDateString("en-US", {

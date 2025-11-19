@@ -456,7 +456,7 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        course.instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({
@@ -496,7 +496,7 @@ export const courseRouter = createTRPCRouter({
         });
       }
 
-      if (course.instructorId !== ctx.session.userId) {
+      if ((course as any).instructorId !== ctx.session.userId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Only the course instructor can publish",
@@ -533,7 +533,7 @@ export const courseRouter = createTRPCRouter({
         });
       }
 
-      if (course.instructorId !== ctx.session.userId) {
+      if ((course as any).instructorId !== ctx.session.userId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Only the course instructor can unpublish",
@@ -569,7 +569,7 @@ export const courseRouter = createTRPCRouter({
         });
       }
 
-      if (course.instructorId !== ctx.session.userId) {
+      if ((course as any).instructorId !== ctx.session.userId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Only the course instructor can delete",
@@ -618,7 +618,7 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        course.instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({
@@ -676,7 +676,7 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        module.course.instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (module.course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({
@@ -714,7 +714,7 @@ export const courseRouter = createTRPCRouter({
         });
       }
 
-      if (module.course.instructorId !== ctx.session.userId) {
+      if ((module.course as any).instructorId !== ctx.session.userId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You don't have permission to delete this module",
@@ -774,7 +774,7 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        course.instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({
@@ -845,7 +845,7 @@ export const courseRouter = createTRPCRouter({
       });
 
       const canEdit =
-        lesson.course.instructorId === ctx.session.userId || (member && member.canEditAllCourses);
+        (lesson.course as any).instructorId === ctx.session.userId || (member && member.canEditAllCourses);
 
       if (!canEdit) {
         throw new TRPCError({
@@ -888,7 +888,7 @@ export const courseRouter = createTRPCRouter({
         });
       }
 
-      if (lesson.course.instructorId !== ctx.session.userId) {
+      if ((lesson.course as any).instructorId !== ctx.session.userId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You don't have permission to delete this lesson",

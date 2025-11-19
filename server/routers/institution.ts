@@ -276,8 +276,8 @@ export const institutionRouter = createTRPCRouter({
     // Combine and deduplicate
     const allInstitutions = [...ownedInstitutions];
     for (const inst of memberInstitutions) {
-      if (!allInstitutions.find((i) => i.id === inst.id)) {
-        allInstitutions.push(inst);
+      if (!allInstitutions.find((i) => i.id === (inst as any).id)) {
+        allInstitutions.push(inst as any);
       }
     }
 

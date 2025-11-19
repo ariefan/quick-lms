@@ -120,7 +120,7 @@ export function CoursePlayer({ courseId, initialLessonId }: CoursePlayerProps) {
             </button>
             <div>
               <h1 className="text-lg font-semibold text-gray-900">{course.title}</h1>
-              <p className="text-sm text-gray-500">{course.institution.name}</p>
+              <p className="text-sm text-gray-500">{(course.institution as any).name}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -151,7 +151,7 @@ export function CoursePlayer({ courseId, initialLessonId }: CoursePlayerProps) {
                     </h3>
                   </div>
                   <div className="divide-y">
-                    {module.lessons?.map((lesson, lessonIndex) => {
+                    {module.lessons?.map((lesson: any, lessonIndex: number) => {
                       const isCompleted = progress?.lessonProgress?.find(
                         (lp) => lp.lessonId === lesson.id && lp.status === "completed"
                       );

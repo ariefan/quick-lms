@@ -162,8 +162,8 @@ export function InstitutionAdminList() {
 
                   <div className="mt-4 text-sm text-gray-500">
                     <div>
-                      <span className="font-medium">Owner:</span> {institution.owner?.name} (
-                      {institution.owner?.email})
+                      <span className="font-medium">Owner:</span> {(institution.owner as any)?.name} (
+                      {(institution.owner as any)?.email})
                     </div>
                     <div>
                       <span className="font-medium">Created:</span>{" "}

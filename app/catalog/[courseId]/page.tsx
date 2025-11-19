@@ -62,7 +62,7 @@ export default function CourseDetailPage({ params }: { params: { courseId: strin
                         d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                       />
                     </svg>
-                    {course.institution.name}
+                    {(course.institution as any).name}
                   </span>
                   <span>•</span>
                   <span className="rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-blue-700">
@@ -126,7 +126,7 @@ export default function CourseDetailPage({ params }: { params: { courseId: strin
                   </div>
                   {module.lessons && module.lessons.length > 0 && (
                     <div className="divide-y px-4">
-                      {module.lessons.map((lesson, lessonIndex) => (
+                      {module.lessons.map((lesson: any, lessonIndex: number) => (
                         <div key={lesson.id} className="flex items-center justify-between py-2">
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-500">{lessonIndex + 1}.</span>
@@ -154,10 +154,10 @@ export default function CourseDetailPage({ params }: { params: { courseId: strin
           <h2 className="mb-4 text-xl font-semibold">Instructor</h2>
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-2xl text-white">
-              {course.instructor.name.charAt(0).toUpperCase()}
+              {(course.instructor as any).name.charAt(0).toUpperCase()}
             </div>
             <div>
-              <h3 className="font-semibold">{course.instructor.name}</h3>
+              <h3 className="font-semibold">{(course.instructor as any).name}</h3>
               <p className="text-sm text-gray-600">Course Instructor</p>
             </div>
           </div>

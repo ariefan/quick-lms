@@ -91,15 +91,15 @@ export function MyLearning() {
           {filteredEnrollments?.map((enrollment) => (
             <Link
               key={enrollment.id}
-              href={`/learn/${enrollment.course.id}`}
+              href={`/learn/${(enrollment.course as any).id}`}
               className="group rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md"
             >
               {/* Course Thumbnail */}
               <div className="flex h-32 items-center justify-center rounded-t-lg bg-gradient-to-br from-blue-500 to-purple-600">
-                {enrollment.course.thumbnail ? (
+                {(enrollment.course as any).thumbnail ? (
                   <img
-                    src={enrollment.course.thumbnail}
-                    alt={enrollment.course.title}
+                    src={(enrollment.course as any).thumbnail}
+                    alt={(enrollment.course as any).title}
                     className="h-full w-full rounded-t-lg object-cover"
                   />
                 ) : (
@@ -112,7 +112,7 @@ export function MyLearning() {
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 line-clamp-2">
-                      {enrollment.course.title}
+                      {(enrollment.course as any).title}
                     </h3>
                     {enrollment.status === "completed" && (
                       <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
@@ -120,9 +120,9 @@ export function MyLearning() {
                       </span>
                     )}
                   </div>
-                  {enrollment.course.shortDescription && (
+                  {(enrollment.course as any).shortDescription && (
                     <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                      {enrollment.course.shortDescription}
+                      {(enrollment.course as any).shortDescription}
                     </p>
                   )}
                 </div>
@@ -155,7 +155,7 @@ export function MyLearning() {
                 </div>
 
                 {/* Institution */}
-                <div className="text-xs text-gray-500">{enrollment.course.institution.name}</div>
+                <div className="text-xs text-gray-500">{(enrollment.course as any).institution.name}</div>
 
                 {/* CTA */}
                 <div className="border-t pt-3">

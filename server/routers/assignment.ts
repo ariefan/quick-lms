@@ -31,7 +31,7 @@ async function canManageAssignment(db: any, courseId: string, userId: string): P
   if (!course) return false;
 
   // Course instructor can manage
-  if (course.instructorId === userId) return true;
+  if ((course as any).instructorId === userId) return true;
 
   // Institution admins can manage
   const membership = await db.query.institutionMembers.findFirst({
@@ -359,18 +359,18 @@ export const assignmentRouter = createTRPCRouter({
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
 
-      if (input.score > submission.assignment.maxScore) {
+      if (input.score > (submission.assignment as any).maxScore) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `Score cannot exceed maximum score of ${submission.assignment.maxScore}`,
+          message: `Score cannot exceed maximum score of ${(submission.assignment as any).maxScore}`,
         });
       }
 
       // Apply late penalty if applicable
       let finalScore = input.score;
-      if (submission.isLate && submission.assignment.lateSubmissionPenalty > 0) {
+      if (submission.isLate && (submission.assignment as any).lateSubmissionPenalty > 0) {
         const penalty = Math.round(
-          (input.score * submission.assignment.lateSubmissionPenalty) / 100
+          (input.score * (submission.assignment as any).lateSubmissionPenalty) / 100
         );
         finalScore = Math.max(0, input.score - penalty);
       }

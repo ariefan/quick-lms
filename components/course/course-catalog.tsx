@@ -139,7 +139,7 @@ export function CourseCatalog() {
                   {course.category && (
                     <>
                       <span className="text-gray-300">•</span>
-                      <span className="text-xs text-gray-500">{course.category.name}</span>
+                      <span className="text-xs text-gray-500">{(course.category as any).name}</span>
                     </>
                   )}
                 </div>
@@ -148,11 +148,11 @@ export function CourseCatalog() {
                 <div className="space-y-1 border-t pt-3">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <span>🏛️</span>
-                    <span>{course.institution.name}</span>
+                    <span>{(course.institution as any).name}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <span>👤</span>
-                    <span>{course.instructor.name}</span>
+                    <span>{(course.instructor as any).name}</span>
                   </div>
                 </div>
               </div>

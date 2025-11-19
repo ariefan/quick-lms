@@ -58,7 +58,7 @@ export function QuizEditor({ courseId, quizId }: QuizEditorProps) {
 
                       {question.options && question.options.length > 0 && (
                         <ul className="mt-2 space-y-1">
-                          {question.options.map((option, idx) => (
+                          {question.options.map((option: any, idx: number) => (
                             <li key={idx} className="flex items-center gap-2 text-sm">
                               <span
                                 className={

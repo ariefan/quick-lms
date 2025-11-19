@@ -321,10 +321,10 @@ export function DiscussionThread({
             <div className="flex items-center gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-600">
-                  {(discussion.user.name || discussion.user.email).charAt(0).toUpperCase()}
+                  {((discussion.user as any).name || (discussion.user as any).email).charAt(0).toUpperCase()}
                 </div>
                 <span className="font-medium">
-                  {discussion.user.name || discussion.user.email}
+                  {(discussion.user as any).name || (discussion.user as any).email}
                 </span>
               </div>
               <span>•</span>

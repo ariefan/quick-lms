@@ -99,8 +99,8 @@ export default function MyCertificatesPage() {
                 </div>
 
                 {/* Certificate Info */}
-                <h3 className="mb-2 font-semibold text-gray-900">{certificate.course.title}</h3>
-                <p className="mb-1 text-sm text-gray-600">{certificate.institution.name}</p>
+                <h3 className="mb-2 font-semibold text-gray-900">{(certificate.course as any).title}</h3>
+                <p className="mb-1 text-sm text-gray-600">{(certificate.institution as any).name}</p>
                 <p className="mb-4 text-sm text-gray-500">
                   Issued {new Date(certificate.issuedAt).toLocaleDateString("en-US", {
                     year: "numeric",
