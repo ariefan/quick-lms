@@ -1157,3 +1157,80 @@ export const couponUsagesRelations = relations(couponUsages, ({ one }) => ({
     references: [institutions.id],
   }),
 }));
+
+// =============================================================================
+// NOTIFICATIONS
+// =============================================================================
+
+/**
+ * Notifications - in-app notification system
+ */
+export const notifications = sqliteTable(
+  "notifications",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    // Recipient
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    // Notification details
+    type: text("type", {
+      enum: [
+        "announcement",
+        "discussion_reply",
+        "assignment_graded",
+        "quiz_graded",
+        "course_enrollment",
+        "certificate_issued",
+        "coupon_created",
+        "system",
+      ],
+    }).notNull(),
+    title: text("title").notNull(),
+    message: text("message").notNull(),
+
+    // Related entities (optional)
+    courseId: text("course_id").references(() => courses.id, { onDelete: "cascade" }),
+    relatedId: text("related_id"), // Generic ID for related entity (discussion, assignment, etc.)
+    relatedType: text("related_type"), // Type of related entity
+    actionUrl: text("action_url"), // URL to navigate to when clicked
+
+    // Status
+    isRead: integer("is_read", { mode: "boolean" }).default(false).notNull(),
+    readAt: integer("read_at", { mode: "timestamp" }),
+
+    // Metadata
+    priority: text("priority", { enum: ["low", "normal", "high"] })
+      .default("normal")
+      .notNull(),
+
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("notifications_user_idx").on(table.userId),
+    index("notifications_read_idx").on(table.isRead),
+    index("notifications_created_idx").on(table.createdAt),
+  ]
+);
+
+// Notification relations
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [notifications.courseId],
+    references: [courses.id],
+  }),
+}));
+
+// Notification schemas
+export const insertNotificationSchema = createInsertSchema(notifications);
+export const selectNotificationSchema = createSelectSchema(notifications);

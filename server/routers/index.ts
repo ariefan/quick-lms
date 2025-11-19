@@ -27,6 +27,7 @@ import { discussionRouter } from "./discussion";
 import { announcementRouter } from "./announcement";
 import { analyticsRouter } from "./analytics";
 import { couponRouter } from "./coupon";
+import { notificationRouter } from "./notification";
 
 /**
  * User router - handles user CRUD operations
@@ -84,6 +85,7 @@ export const appRouter = createTRPCRouter({
   announcement: announcementRouter,
   analytics: analyticsRouter,
   coupon: couponRouter,
+  notification: notificationRouter,
 });
 
 /**
