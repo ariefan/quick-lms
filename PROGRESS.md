@@ -1,6 +1,6 @@
 # Quick LMS - Implementation Progress
 
-**Last Updated:** 2025-11-19 (After Phase 1 Completion)
+**Last Updated:** 2025-11-19 (After File Storage Implementation)
 
 This document tracks the implementation progress of the Quick LMS platform. Tasks are organized by phase and priority.
 
@@ -360,6 +360,7 @@ This document tracks the implementation progress of the Quick LMS platform. Task
 - ✅ Helper script: `scripts/after-work.sh`
 
 **Usage:**
+
 ```bash
 # After coding session:
 pnpm after-work  # Formats, lints, type-checks, kills port 3000
@@ -374,6 +375,56 @@ pnpm kill-port   # Kill port 3000
 pnpm dev:clean   # Kills port 3000 first, then starts dev
 ```
 
+### File Storage ✅ COMPLETED
+
+- ✅ S3-compatible storage integration (iDrive e2)
+- ✅ AWS SDK v3 client configuration
+- ✅ Presigned URL upload/download
+- ✅ File validation and size limits (50MB default)
+- ✅ tRPC upload routes (getUploadUrl, getDownloadUrl, deleteFile)
+- ✅ Example upload component with progress tracking
+- ✅ Folder organization (avatars, courses, lessons, assignments, temp)
+- ✅ File type validation (image, video, document, audio, any)
+- ⏳ Image optimization pipeline
+- ⏳ Video transcoding
+
+**Implementation Details:**
+
+Files Created:
+
+- `lib/storage/s3.ts` - Complete S3 utilities with upload/download/delete
+- `server/routers/upload.ts` - tRPC routes for file operations
+- `components/upload/file-upload.tsx` - Example upload component
+- `.env.example` - Environment variables template
+
+Configuration:
+
+- S3 Endpoint: iDrive e2 (x8r8.sg03.idrivee2-90.com)
+- Region: ap-southeast-1
+- Bucket: lms
+- Max file size: 50MB (configurable)
+- Presigned URL expiry: 5 minutes (upload), 1 hour (download)
+
+**Usage:**
+
+```typescript
+// Client-side upload using presigned URL
+const { uploadUrl, key } = await trpc.upload.getUploadUrl.mutate({
+  filename: file.name,
+  contentType: file.type,
+  size: file.size,
+  folder: "courses", // avatars, courses, lessons, assignments, temp
+  fileType: "video", // image, video, document, audio, any
+});
+
+// Upload directly to S3
+await fetch(uploadUrl, {
+  method: "PUT",
+  body: file,
+  headers: { "Content-Type": file.type },
+});
+```
+
 ### Performance
 
 - ⏳ Image optimization
@@ -381,13 +432,6 @@ pnpm dev:clean   # Kills port 3000 first, then starts dev
 - ⏳ Database query optimization
 - ⏳ Caching strategy (Redis?)
 - ⏳ CDN setup for static assets
-
-### File Storage
-
-- ⏳ Choose storage solution (S3, Cloudinary, etc.)
-- ⏳ File upload API
-- ⏳ Image optimization pipeline
-- ⏳ Video transcoding
 
 ### Security
 
@@ -494,5 +538,5 @@ pnpm dev:clean   # Kills port 3000 first, then starts dev
 
 ---
 
-**Last Commit:** Add code quality automation (Prettier, ESLint, type-check, after-work scripts)
+**Last Commit:** Add S3 file storage support with iDrive e2, presigned URLs, and upload API
 **Next Milestone:** Complete Phase 2 - Institution Management
