@@ -49,13 +49,31 @@ export default function Home() {
               </div>
             </div>
 
-            <button
-              onClick={handleLogout}
-              disabled={logoutMutation.isPending}
-              className="w-full rounded-md bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 disabled:opacity-50"
-            >
-              {logoutMutation.isPending ? "Signing out..." : "Sign out"}
-            </button>
+            <div className="space-y-3">
+              <Link
+                href="/institutions/register"
+                className="block w-full rounded-md bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+              >
+                Register Institution
+              </Link>
+
+              {session.role === "admin" && (
+                <Link
+                  href="/admin/institutions"
+                  className="block w-full rounded-md bg-purple-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+                >
+                  Manage Institutions (Admin)
+                </Link>
+              )}
+
+              <button
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+                className="w-full rounded-md bg-gray-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 disabled:opacity-50"
+              >
+                {logoutMutation.isPending ? "Signing out..." : "Sign out"}
+              </button>
+            </div>
           </div>
         ) : (
           <div className="space-y-4">

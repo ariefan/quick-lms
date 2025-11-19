@@ -17,6 +17,7 @@ import { users, insertUserSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { authRouter } from "./auth";
 import { uploadRouter } from "./upload";
+import { institutionRouter } from "./institution";
 
 /**
  * User router - handles user CRUD operations
@@ -64,6 +65,7 @@ export const appRouter = createTRPCRouter({
   auth: authRouter,
   user: userRouter,
   upload: uploadRouter,
+  institution: institutionRouter,
 });
 
 /**

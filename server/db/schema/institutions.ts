@@ -9,6 +9,7 @@
  */
 
 import { sqliteTable, text, integer, index, primaryKey } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { users } from "./auth";
@@ -192,3 +193,43 @@ export type InstitutionMember = typeof institutionMembers.$inferSelect;
 export type NewInstitutionMember = typeof institutionMembers.$inferInsert;
 export type InstitutionInvitation = typeof institutionInvitations.$inferSelect;
 export type NewInstitutionInvitation = typeof institutionInvitations.$inferInsert;
+
+// Relations
+export const institutionsRelations = relations(institutions, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [institutions.ownerId],
+    references: [users.id],
+  }),
+  reviewer: one(users, {
+    fields: [institutions.reviewedBy],
+    references: [users.id],
+  }),
+  members: many(institutionMembers),
+  invitations: many(institutionInvitations),
+}));
+
+export const institutionMembersRelations = relations(institutionMembers, ({ one }) => ({
+  institution: one(institutions, {
+    fields: [institutionMembers.institutionId],
+    references: [institutions.id],
+  }),
+  user: one(users, {
+    fields: [institutionMembers.userId],
+    references: [users.id],
+  }),
+  inviter: one(users, {
+    fields: [institutionMembers.invitedBy],
+    references: [users.id],
+  }),
+}));
+
+export const institutionInvitationsRelations = relations(institutionInvitations, ({ one }) => ({
+  institution: one(institutions, {
+    fields: [institutionInvitations.institutionId],
+    references: [institutions.id],
+  }),
+  invitedBy: one(users, {
+    fields: [institutionInvitations.invitedBy],
+    references: [users.id],
+  }),
+}));
