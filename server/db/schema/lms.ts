@@ -681,3 +681,97 @@ export const wishlistsRelations = relations(wishlists, ({ one }) => ({
     references: [courses.id],
   }),
 }));
+
+export const quizzesRelations = relations(quizzes, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [quizzes.courseId],
+    references: [courses.id],
+  }),
+  lesson: one(lessons, {
+    fields: [quizzes.lessonId],
+    references: [lessons.id],
+  }),
+  institution: one(institutions, {
+    fields: [quizzes.institutionId],
+    references: [institutions.id],
+  }),
+  questions: many(quizQuestions),
+  attempts: many(quizAttempts),
+}));
+
+export const quizQuestionsRelations = relations(quizQuestions, ({ one }) => ({
+  quiz: one(quizzes, {
+    fields: [quizQuestions.quizId],
+    references: [quizzes.id],
+  }),
+}));
+
+export const quizAttemptsRelations = relations(quizAttempts, ({ one, many }) => ({
+  user: one(users, {
+    fields: [quizAttempts.userId],
+    references: [users.id],
+  }),
+  quiz: one(quizzes, {
+    fields: [quizAttempts.quizId],
+    references: [quizzes.id],
+  }),
+  course: one(courses, {
+    fields: [quizAttempts.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [quizAttempts.institutionId],
+    references: [institutions.id],
+  }),
+  answers: many(quizAnswers),
+}));
+
+export const quizAnswersRelations = relations(quizAnswers, ({ one }) => ({
+  attempt: one(quizAttempts, {
+    fields: [quizAnswers.attemptId],
+    references: [quizAttempts.id],
+  }),
+  question: one(quizQuestions, {
+    fields: [quizAnswers.questionId],
+    references: [quizQuestions.id],
+  }),
+  user: one(users, {
+    fields: [quizAnswers.userId],
+    references: [users.id],
+  }),
+}));
+
+export const assignmentsRelations = relations(assignments, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [assignments.courseId],
+    references: [courses.id],
+  }),
+  lesson: one(lessons, {
+    fields: [assignments.lessonId],
+    references: [lessons.id],
+  }),
+  institution: one(institutions, {
+    fields: [assignments.institutionId],
+    references: [institutions.id],
+  }),
+  submissions: many(assignmentSubmissions),
+}));
+
+export const assignmentSubmissionsRelations = relations(assignmentSubmissions, ({ one }) => ({
+  user: one(users, {
+    fields: [assignmentSubmissions.userId],
+    references: [users.id],
+  }),
+  assignment: one(assignments, {
+    fields: [assignmentSubmissions.assignmentId],
+    references: [assignments.id],
+  }),
+  course: one(courses, {
+    fields: [assignmentSubmissions.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [assignmentSubmissions.institutionId],
+    references: [institutions.id],
+  }),
+}));
