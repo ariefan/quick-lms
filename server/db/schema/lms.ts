@@ -706,6 +706,104 @@ export const announcements = sqliteTable(
   ]
 );
 
+/**
+ * Coupons - discount codes for courses
+ */
+export const coupons = sqliteTable(
+  "coupons",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    code: text("code").notNull().unique(),
+    description: text("description"),
+
+    // Discount settings
+    discountType: text("discount_type", { enum: ["percentage", "fixed"] })
+      .notNull()
+      .default("percentage"),
+    discountValue: integer("discount_value").notNull(), // percentage or fixed amount in cents
+    maxDiscount: integer("max_discount"), // max discount amount in cents (for percentage)
+
+    // Scope
+    courseId: text("course_id").references(() => courses.id, { onDelete: "cascade" }), // null = platform-wide
+    institutionId: text("institution_id")
+      .notNull()
+      .references(() => institutions.id, { onDelete: "cascade" }),
+
+    // Usage limits
+    maxUses: integer("max_uses"), // null = unlimited
+    maxUsesPerUser: integer("max_uses_per_user").default(1).notNull(),
+    currentUses: integer("current_uses").default(0).notNull(),
+
+    // Valid period
+    startsAt: integer("starts_at", { mode: "timestamp" }),
+    expiresAt: integer("expires_at", { mode: "timestamp" }),
+
+    // Status
+    isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+
+    // Relations
+    createdBy: text("created_by")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("coupons_code_idx").on(table.code),
+    index("coupons_course_idx").on(table.courseId),
+    index("coupons_institution_idx").on(table.institutionId),
+    index("coupons_active_idx").on(table.isActive),
+  ]
+);
+
+/**
+ * Coupon usage tracking
+ */
+export const couponUsages = sqliteTable(
+  "coupon_usages",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    couponId: text("coupon_id")
+      .notNull()
+      .references(() => coupons.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    enrollmentId: text("enrollment_id")
+      .notNull()
+      .references(() => enrollments.id, { onDelete: "cascade" }),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    institutionId: text("institution_id")
+      .notNull()
+      .references(() => institutions.id, { onDelete: "cascade" }),
+
+    // Discount details
+    discountAmount: integer("discount_amount").notNull(), // actual discount applied in cents
+    originalPrice: integer("original_price").notNull(), // in cents
+    finalPrice: integer("final_price").notNull(), // in cents
+
+    usedAt: integer("used_at", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("coupon_usages_coupon_idx").on(table.couponId),
+    index("coupon_usages_user_idx").on(table.userId),
+    index("coupon_usages_enrollment_idx").on(table.enrollmentId),
+  ]
+);
+
 // Zod schemas
 export const insertEnrollmentSchema = createInsertSchema(enrollments);
 export const selectEnrollmentSchema = createSelectSchema(enrollments);
@@ -1017,6 +1115,45 @@ export const announcementsRelations = relations(announcements, ({ one }) => ({
   }),
   institution: one(institutions, {
     fields: [announcements.institutionId],
+    references: [institutions.id],
+  }),
+}));
+
+export const couponsRelations = relations(coupons, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [coupons.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [coupons.institutionId],
+    references: [institutions.id],
+  }),
+  creator: one(users, {
+    fields: [coupons.createdBy],
+    references: [users.id],
+  }),
+  usages: many(couponUsages),
+}));
+
+export const couponUsagesRelations = relations(couponUsages, ({ one }) => ({
+  coupon: one(coupons, {
+    fields: [couponUsages.couponId],
+    references: [coupons.id],
+  }),
+  user: one(users, {
+    fields: [couponUsages.userId],
+    references: [users.id],
+  }),
+  enrollment: one(enrollments, {
+    fields: [couponUsages.enrollmentId],
+    references: [enrollments.id],
+  }),
+  course: one(courses, {
+    fields: [couponUsages.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [couponUsages.institutionId],
     references: [institutions.id],
   }),
 }));
