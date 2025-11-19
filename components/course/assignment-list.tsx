@@ -62,10 +62,10 @@ export function AssignmentList({ courseId }: AssignmentListProps) {
               </div>
               <div className="flex gap-2">
                 <Link
-                  href={`/courses/${courseId}/assignments/${assignment.id}`}
+                  href={`/courses/${courseId}/assignments/${assignment.id}/submissions`}
                   className="rounded-md bg-gray-600 px-3 py-1 text-sm font-semibold text-white hover:bg-gray-500"
                 >
-                  View
+                  Grade
                 </Link>
                 <button
                   onClick={() => {
