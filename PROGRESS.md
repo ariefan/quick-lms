@@ -1,6 +1,6 @@
 # Quick LMS - Implementation Progress
 
-**Last Updated:** 2025-11-19 (After Phase 4 - Student Features)
+**Last Updated:** 2025-11-19 (During Phase 5 - Assessments & Grading)
 
 This document tracks the implementation progress of the Quick LMS platform. Tasks are organized by phase and priority.
 
@@ -13,7 +13,7 @@ This document tracks the implementation progress of the Quick LMS platform. Task
 - ✅ **Phase 2: Institution Management** - COMPLETED
 - ✅ **Phase 3: Course Management** - COMPLETED
 - ✅ **Phase 4: Student Features** - COMPLETED
-- ⏳ **Phase 5: Assessments & Grading** - PENDING
+- 🔄 **Phase 5: Assessments & Grading** - IN PROGRESS (50% - Backend Complete)
 - ⏳ **Phase 6: Advanced Features** - PENDING
 
 ---
@@ -518,49 +518,127 @@ Progress Algorithm:
 
 ---
 
-## Phase 5: Assessments & Grading ⏳ PENDING
+## Phase 5: Assessments & Grading 🔄 IN PROGRESS
 
-**Priority:** MEDIUM | **Status:** 0% Complete
+**Priority:** MEDIUM | **Status:** 50% Complete (Backend Complete, Frontend In Progress)
 
-### Quizzes
+### Part 1: Backend APIs ✅ COMPLETED
 
-- ⏳ Quiz builder (instructor)
-- ⏳ Question management
-- ⏳ Multiple question types support
-  - ⏳ Multiple choice
-  - ⏳ Single choice
-  - ⏳ True/false
-  - ⏳ Short answer
-  - ⏳ Essay
-- ⏳ Quiz settings (time limit, attempts, etc.)
+#### Quizzes Backend
+
+- ✅ Complete quiz tRPC router (16 procedures, 650+ lines)
+- ✅ Quiz CRUD operations (create, getById, getCourseQuizzes, update, delete)
+- ✅ Question management (createQuestion, updateQuestion, deleteQuestion)
+- ✅ Multiple question types support (all 5 types implemented):
+  - ✅ Single choice with auto-grading
+  - ✅ Multiple choice with auto-grading
+  - ✅ True/false with auto-grading
+  - ✅ Short answer with case-insensitive matching
+  - ✅ Essay (manual grading required)
+- ✅ Quiz settings (time limit, max attempts, passing score, randomize questions/options)
+- ✅ Quiz attempt system (startAttempt, submitAttempt, getAttemptResults)
+- ✅ Auto-grading algorithm with detailed scoring
+- ✅ Quiz attempt history (getMyAttempts, getQuizAttempts)
+- ✅ Permission-based access control
+- ✅ Drizzle relations for quizzes, questions, attempts, and answers
+
+#### Assignments Backend
+
+- ✅ Complete assignment tRPC router (10 procedures, 400+ lines)
+- ✅ Assignment CRUD operations (create, getById, getCourseAssignments, update, delete)
+- ✅ Assignment submission system (submit with resubmission support)
+- ✅ File upload support for submissions (attachment URLs)
+- ✅ Assignment grading interface (gradeSubmission with feedback)
+- ✅ Feedback and comments system
+- ✅ Late submission handling (automatic detection and penalty calculation)
+- ✅ Late penalty calculation (configurable percentage)
+- ✅ Permission-based access control
+- ✅ Drizzle relations for assignments and submissions
+
+**Files Created (Backend):**
+
+- `server/routers/quiz.ts` - Complete quiz router with auto-grading
+- `server/routers/assignment.ts` - Complete assignment router with submissions
+- `server/db/schema/lms.ts` - Added relations for quizzes and assignments
+- `server/routers/index.ts` - Registered quiz and assignment routers
+
+**Key Features Implemented:**
+
+1. **Auto-Grading Algorithm**: Intelligent grading system supporting 5 question types with partial credit
+2. **Late Penalty System**: Automatic penalty application based on configurable percentages
+3. **Quiz Attempt Workflow**: State management (in_progress → completed) with time tracking
+4. **Permission System**: Instructors and admins can manage, students can only access their data
+5. **Resubmission Support**: Students can resubmit assignments with tracking
+6. **Type-Safe API**: Full tRPC integration with Zod validation
+
+### Part 2: Frontend UI 🔄 IN PROGRESS
+
+#### Assessment Management UI ✅ COMPLETED
+
+- ✅ QuizList component for instructors (components/course/quiz-list.tsx)
+- ✅ AssignmentList component for instructors (components/course/assignment-list.tsx)
+- ✅ AssessmentSummary wrapper component (components/course/assessment-summary.tsx)
+- ✅ Integrated assessments tab in CourseEditor (components/course/course-editor.tsx)
+- ✅ Quiz metadata display (questions, passing score, attempts, time limit)
+- ✅ Assignment metadata display (max score, due date, late penalty)
+- ✅ Edit and delete functionality for quizzes and assignments
+- ✅ Links to create new quizzes and assignments
+
+**Files Created (Frontend - Assessment Management):**
+
+- `components/course/quiz-list.tsx` - Quiz listing with edit/delete
+- `components/course/assignment-list.tsx` - Assignment listing with view/delete
+- `components/course/assessment-summary.tsx` - Combined quiz and assignment display
+- Updated: `components/course/course-editor.tsx` - Added assessments tab
+
+#### Quiz Builder & Player ⏳ PENDING
+
+- ⏳ Quiz creation form with question builder
+- ⏳ Question type selector (single, multiple, true/false, short answer, essay)
+- ⏳ Option management (add/remove/reorder)
+- ⏳ Quiz settings configuration UI
 - ⏳ Quiz taking interface (student)
-- ⏳ Auto-grading for objective questions
-- ⏳ Quiz results page
-- ⏳ Quiz attempt history
+- ⏳ Timer display for timed quizzes
+- ⏳ Question navigation
+- ⏳ Auto-save progress
+- ⏳ Quiz results page with score breakdown
+- ⏳ Attempt history view
 
-### Assignments
+#### Assignment System UI ⏳ PENDING
 
-- ⏳ Assignment creation (instructor)
+- ⏳ Assignment creation form
+- ⏳ Assignment detail page (instructor view)
 - ⏳ Assignment submission interface (student)
 - ⏳ File upload for submissions
-- ⏳ Assignment grading interface
-- ⏳ Feedback and comments
-- ⏳ Late submission handling
-- ⏳ Grade book
+- ⏳ Grading interface for instructors
+- ⏳ Feedback display for students
+- ⏳ Late submission warning
+- ⏳ Submission history view
 
-### Grading
+#### Gradebook ⏳ PENDING
 
 - ⏳ Overall grade calculation
 - ⏳ Grade weights configuration
 - ⏳ Student grade view
-- ⏳ Instructor gradebook
-- ⏳ Export grades
+- ⏳ Instructor gradebook with all students
+- ⏳ Export grades to CSV
+- ⏳ Grade statistics and analytics
+
+**Next Steps:**
+
+1. Build quiz builder UI with question management
+2. Build quiz taking interface with timer and navigation
+3. Build assignment creation and submission forms
+4. Build grading interface for instructors
+5. Build gradebook for grade tracking
+6. Test all frontend components
+7. Commit Phase 5 Part 2
 
 **Dependencies:**
 
-- Phase 4 enrollment system
-- File upload solution
-- Rich text editor for feedback
+- ✅ Phase 4 enrollment system
+- ✅ File upload solution (S3-compatible storage)
+- ⏳ Rich text editor for feedback (Future enhancement)
 
 ---
 
@@ -826,5 +904,6 @@ await fetch(uploadUrl, {
 
 ---
 
-**Last Commit:** Complete Phase 4 - Student Features with enrollment, progress tracking, reviews, and wishlist
-**Next Milestone:** Complete Phase 5 - Assessments & Grading (Quizzes & Assignments)
+**Last Commit:** Phase 5 Part 1 Complete - Backend APIs for quizzes and assignments with auto-grading
+**Current Work:** Phase 5 Part 2 - Frontend UI for assessments (assessment management UI complete)
+**Next Milestone:** Complete Phase 5 Part 2 - Quiz builder, quiz player, assignment UI, and gradebook

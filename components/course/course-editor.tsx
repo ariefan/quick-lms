@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
+import { AssessmentSummary } from "./assessment-summary";
 
 interface CourseEditorProps {
   courseId: string;
@@ -10,7 +11,9 @@ interface CourseEditorProps {
 
 export function CourseEditor({ courseId }: CourseEditorProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"details" | "content" | "settings">("content");
+  const [activeTab, setActiveTab] = useState<"details" | "content" | "assessments" | "settings">(
+    "content"
+  );
   const [showModuleForm, setShowModuleForm] = useState(false);
   const [showLessonForm, setShowLessonForm] = useState(false);
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
@@ -101,7 +104,7 @@ export function CourseEditor({ courseId }: CourseEditorProps) {
       {/* Tabs */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
-          {(["content", "details", "settings"] as const).map((tab) => (
+          {(["content", "details", "assessments", "settings"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -185,6 +188,13 @@ export function CourseEditor({ courseId }: CourseEditorProps) {
         )}
 
         {activeTab === "details" && <CourseDetailsForm course={course} onRefetch={refetch} />}
+
+        {activeTab === "assessments" && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Assessments</h2>
+            <AssessmentSummary courseId={course.id} />
+          </div>
+        )}
 
         {activeTab === "settings" && (
           <div className="space-y-6">
