@@ -50,20 +50,63 @@ export default function Home() {
             </div>
 
             <div className="space-y-3">
-              <Link
-                href="/institutions/register"
-                className="block w-full rounded-md bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              >
-                Register Institution
-              </Link>
+              {/* Student Features */}
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-gray-700">Student</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/catalog"
+                    className="block rounded-md border border-blue-600 bg-white px-4 py-2 text-center text-sm font-semibold text-blue-600 hover:bg-blue-50"
+                  >
+                    Browse Courses
+                  </Link>
+                  <Link
+                    href="/learn"
+                    className="block rounded-md bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-500"
+                  >
+                    My Learning
+                  </Link>
+                  <Link
+                    href="/wishlist"
+                    className="block rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                  >
+                    Wishlist
+                  </Link>
+                </div>
+              </div>
 
+              {/* Instructor Features */}
+              {(session.role === "instructor" || session.role === "admin") && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold text-gray-700">Instructor</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href="/courses"
+                      className="block rounded-md bg-green-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-green-500"
+                    >
+                      My Courses
+                    </Link>
+                    <Link
+                      href="/institutions/register"
+                      className="block rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                    >
+                      Register Institution
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* Admin Features */}
               {session.role === "admin" && (
-                <Link
-                  href="/admin/institutions"
-                  className="block w-full rounded-md bg-purple-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
-                >
-                  Manage Institutions (Admin)
-                </Link>
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold text-gray-700">Admin</h3>
+                  <Link
+                    href="/admin/institutions"
+                    className="block w-full rounded-md bg-purple-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-purple-500"
+                  >
+                    Manage Institutions
+                  </Link>
+                </div>
               )}
 
               <button

@@ -10,6 +10,7 @@
  */
 
 import { sqliteTable, text, integer, index, primaryKey } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { users } from "./auth";
@@ -619,3 +620,64 @@ export type CourseReview = typeof courseReviews.$inferSelect;
 export type NewCourseReview = typeof courseReviews.$inferInsert;
 export type Wishlist = typeof wishlists.$inferSelect;
 export type NewWishlist = typeof wishlists.$inferInsert;
+
+// Relations
+export const enrollmentsRelations = relations(enrollments, ({ one }) => ({
+  user: one(users, {
+    fields: [enrollments.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [enrollments.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [enrollments.institutionId],
+    references: [institutions.id],
+  }),
+}));
+
+export const lessonProgressRelations = relations(lessonProgress, ({ one }) => ({
+  user: one(users, {
+    fields: [lessonProgress.userId],
+    references: [users.id],
+  }),
+  lesson: one(lessons, {
+    fields: [lessonProgress.lessonId],
+    references: [lessons.id],
+  }),
+  course: one(courses, {
+    fields: [lessonProgress.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [lessonProgress.institutionId],
+    references: [institutions.id],
+  }),
+}));
+
+export const courseReviewsRelations = relations(courseReviews, ({ one }) => ({
+  user: one(users, {
+    fields: [courseReviews.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [courseReviews.courseId],
+    references: [courses.id],
+  }),
+  institution: one(institutions, {
+    fields: [courseReviews.institutionId],
+    references: [institutions.id],
+  }),
+}));
+
+export const wishlistsRelations = relations(wishlists, ({ one }) => ({
+  user: one(users, {
+    fields: [wishlists.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [wishlists.courseId],
+    references: [courses.id],
+  }),
+}));

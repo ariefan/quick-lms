@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
+import { WishlistButton } from "@/components/student/wishlist-button";
 
 export function CourseCatalog() {
   const [categoryId, setCategoryId] = useState<string>("");
@@ -112,6 +113,10 @@ export function CourseCatalog() {
                 {/* Price Badge */}
                 <div className="absolute right-3 top-3 rounded-full bg-white px-3 py-1 text-sm font-semibold">
                   {course.price === "0.00" || course.price === "0" ? "Free" : `$${course.price}`}
+                </div>
+                {/* Wishlist Button */}
+                <div className="absolute left-3 top-3">
+                  <WishlistButton courseId={course.id} variant="icon" />
                 </div>
               </div>
 
