@@ -25,6 +25,7 @@ import { assignmentRouter } from "./assignment";
 import { certificateRouter } from "./certificate";
 import { discussionRouter } from "./discussion";
 import { announcementRouter } from "./announcement";
+import { analyticsRouter } from "./analytics";
 
 /**
  * User router - handles user CRUD operations
@@ -80,6 +81,7 @@ export const appRouter = createTRPCRouter({
   certificate: certificateRouter,
   discussion: discussionRouter,
   announcement: announcementRouter,
+  analytics: analyticsRouter,
 });
 
 /**
