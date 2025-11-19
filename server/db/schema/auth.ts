@@ -19,6 +19,7 @@ import { z } from "zod";
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(), // Compatible with auth providers
   email: text("email").notNull().unique(),
+  password: text("password").notNull(), // Hashed password
   name: text("name").notNull(),
   avatar: text("avatar"),
   bio: text("bio"),
@@ -74,6 +75,7 @@ export const userProfiles = sqliteTable("user_profiles", {
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users, {
   email: z.string().email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   name: z.string().min(1).max(100),
   role: z.enum(["user", "instructor", "admin"]).default("user"),
 });
@@ -83,8 +85,26 @@ export const selectUserSchema = createSelectSchema(users);
 export const insertUserProfileSchema = createInsertSchema(userProfiles);
 export const selectUserProfileSchema = createSelectSchema(userProfiles);
 
+// Auth-specific schemas
+export const registerSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  name: z.string().min(1, "Name is required").max(100),
+});
+
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+// Public user schema (without password)
+export const publicUserSchema = selectUserSchema.omit({ password: true });
+
 // Types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+export type PublicUser = z.infer<typeof publicUserSchema>;
 export type UserProfile = typeof userProfiles.$inferSelect;
 export type NewUserProfile = typeof userProfiles.$inferInsert;
+export type RegisterInput = z.infer<typeof registerSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;

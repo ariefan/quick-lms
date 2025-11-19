@@ -15,6 +15,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { users, insertUserSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { authRouter } from "./auth";
 
 /**
  * User router - handles user CRUD operations
@@ -64,6 +65,7 @@ const userRouter = createTRPCRouter({
  * Export the type for client-side usage
  */
 export const appRouter = createTRPCRouter({
+  auth: authRouter,
   user: userRouter,
 });
 
